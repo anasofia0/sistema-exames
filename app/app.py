@@ -14,7 +14,7 @@ def create_app():
     app = Flask(__name__)
 
     basedir = os.path.abspath(os.path.dirname(__file__))
-    db_path = os.path.join(basedir, "..", "chamada.db")
+    db_path = os.path.join(basedir, '..', 'saas.db')
     login_manager.init_app(app)
     app.config["SECRET_KEY"] = "env"
     app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{db_path}"
@@ -23,15 +23,14 @@ def create_app():
     db.init_app(app)
     with app.app_context():
         from .models.user import User
-
         db.create_all()
     bootstrap.init_app(app)
 
-    from .auth.auth import bp
+    @app.context_processor
+    def inject_bootstrap():
+        return {'bootstrap': bootstrap}
 
-    app.register_blueprint(bp)
-    
-    from .controllers import bp
+    from .auth.auth import bp
 
     app.register_blueprint(bp)
 
@@ -40,14 +39,11 @@ def create_app():
 
 app = create_app()
 
-
 @app.route("/")
 def index():
     return render_template("index.html")
 
-
 @login_manager.user_loader
 def load_user(user_id):
     from .models.user import User
-
     return User.query.get(user_id)
