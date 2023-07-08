@@ -23,7 +23,7 @@ def create_app():
     db.init_app(app)
     with app.app_context():
         from .models.user import User
-        from .models.exame import Exame
+        from .models import Exame, Questao, User, QuestaoExame
         db.create_all()
     bootstrap.init_app(app)
 
@@ -32,8 +32,11 @@ def create_app():
         return {'bootstrap': bootstrap}
 
     from .auth.auth import bp
-
+    from .controllers import blueprints
+    
     app.register_blueprint(bp)
+    for i in blueprints():
+        app.register_blueprint(i)
 
     return app
 

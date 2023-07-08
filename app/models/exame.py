@@ -1,31 +1,30 @@
 from . import db
-from sqlalchemy import Column, String, Integer, Boolean, Float, DATETIME
-from flask_login import UserMixin
+from sqlalchemy import Column, String, Integer, Float, DATETIME, ForeignKey
+
 
 class Exame(db.Model):
     __tablename__ = "exame"
 
-    id_exame = Column(Integer, primary_key=True)
-    nome = Column(String(50))
-    professor = Column(Integer)
-    nota = Column(Float)
-    data_criacao = Column(DATETIME)
-    prazo = Column(DATETIME)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    nome = Column(String(50), nullable=False)
+    professor = Column(Integer, nullable=False)
+    nota = Column(Float, nullable=False)
+    data_abertura = Column(DATETIME, nullable=False)
+    data_fechamento = Column(DATETIME, nullable=False)
+
+    questoes = db.relationship("Questao", secondary="questao_exame", back_populates="exames") # many to many
 
     # get_id method
     def get_id(self):
         return str(self.id_exame)
 
-# from . import db
-# from sqlalchemy.orm import Mapped, mapped_column
-# from sqlalchemy import String, Boolean
 
+class QuestaoExame(db.Model):
+    __tablename__ = "questao_exame"
 
-# class User(db.Model):
-#     __tablename__ = "user"
+    prova_id = Column(Integer, ForeignKey("exame.id"), nullable=False, primary_key=True)
+    questao_id = Column(Integer, ForeignKey("questao.id"), nullable=False, primary_key=True)
+    nota = Column(Float, nullable=False)
 
-#     matricula: Mapped[String] = mapped_column(String(), primary_key=True)
-#     nome: Mapped[String] = mapped_column(String(50))
-#     email: Mapped[String] = mapped_column(String())
-#     professor: Mapped[Boolean] = mapped_column(Boolean())
-#     senha: Mapped[String] = mapped_column(String())
+    #questao = db.relationship("Questao", back_populates="questao")
+    #exame = db.relationship("Exame", back_populates="exame")
