@@ -12,7 +12,6 @@ class Questao(db.Model):
     __tablename__ = "questao"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    nome = Column(String(50), nullable=False)
     tipo_questao = Column(TipoQuestao, nullable=False)
     enunciado = Column(String, nullable=False)
     resposta_certa = Column(String, nullable=False)
@@ -22,4 +21,4 @@ class Questao(db.Model):
 
     # get_id method
     def get_id(self):
-        return str(self.id_exame)
+        return str(self.id)

@@ -5,24 +5,19 @@ from sqlalchemy import Column, String, Integer, Float, DATETIME, ForeignKey
 class Exame(db.Model):
     __tablename__ = "exame"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
+    id = Column(Integer, primary_key=True)
     nome = Column(String(50), nullable=False)
-    professor = Column(Integer, nullable=False)
+    professor = Column(Integer, nullable=False) # todo
     nota = Column(Float, nullable=False)
     data_abertura = Column(DATETIME, nullable=False)
     data_fechamento = Column(DATETIME, nullable=False)
 
     questoes = db.relationship("Questao", secondary="questao_exame", back_populates="exames") # many to many
 
-    # get_id method
-    def get_id(self):
-        return str(self.id_exame)
-
-
 class QuestaoExame(db.Model):
     __tablename__ = "questao_exame"
 
-    prova_id = Column(Integer, ForeignKey("exame.id"), nullable=False, primary_key=True)
+    exame_id = Column(Integer, ForeignKey("exame.id"), nullable=False, primary_key=True)
     questao_id = Column(Integer, ForeignKey("questao.id"), nullable=False, primary_key=True)
     nota = Column(Float, nullable=False)
 

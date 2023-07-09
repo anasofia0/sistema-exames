@@ -1,4 +1,4 @@
 def blueprints():
-    from .criacao_exames import bp as criacao_exames_bp
+    from .exames import bp as exames_bp
 
-    return [criacao_exames_bp]
+    return [exames_bp]

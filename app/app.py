@@ -37,6 +37,9 @@ def create_app():
     app.register_blueprint(bp)
     for i in blueprints():
         app.register_blueprint(i)
+    
+    from .cli_cmds import seed_cli
+    app.cli.add_command(seed_cli)
 
     return app
 
