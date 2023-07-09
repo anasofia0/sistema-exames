@@ -61,11 +61,13 @@ class LoginForm(FlaskForm):
     matricula = StringField(
         "matricula",
         validators=[
+            DataRequired(),
             Regexp("\d", message="Matrícula deve conter somente digitos numéricos"),
         ],
     )
     senha = PasswordField(
         validators=[
+            DataRequired(),
             Length(
                 min=6, max=20, message="Senhas com no mínimo 6 caracteres e máximo 20"
             ),
