@@ -33,8 +33,8 @@ def create_app():
     def inject_bootstrap():
         return {'bootstrap': bootstrap}
 
-    from .auth.auth import auth_bp
-    app.register_blueprint(auth_bp)
+    from .auth import blueprints
+    app.register_blueprint(blueprints()[0])
     from .controllers import blueprints
     for bp in blueprints():
         app.register_blueprint(bp)

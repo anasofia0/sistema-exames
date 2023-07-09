@@ -1,37 +1,88 @@
 {% extends "base.html" %}
-{% from 'bootstrap5/form.html' import render_form %}
-
 {% block title %}Criar Exame{% endblock %}
-{% block content%}
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Formulário de Criação de Exame</title>
-</head>
-<body>
-  <h1>Formulário de Criação de Exame</h1>
-  <form action="/criar-exame" method="POST">
-    <label for="nome">Nome:</label>
-    <input type="text" id="nome" name="nome" required><br><br>
 
-    <label for="nota">Nota:</label>
-    <input type="number" id="nota" name="nota" step="0.01" required><br><br>
+{% block styles %}
+    {{ super() }}
+    <style>
+        body {
+            background: #f5f5f5;
+            font-family: Arial, sans-serif;
+        }
 
-    <label for="data_abertura">Data de Abertura:</label>
-    <input type="datetime-local" id="data_abertura" name="data_abertura" required><br><br>
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 15px;
+        }
 
-    <label for="data_fechamento">Data de Fechamento:</label>
-    <input type="datetime-local" id="data_fechamento" name="data_fechamento" required><br><br>
+        .form-group {
+            margin-bottom: 15px;
+        }
 
-    <label for="{{questao}}">Questões:</label>
-    <select id="{{questao}}" name="{{questao}}">
-        {% for questao in lista_questoes %}
-        <option value="{{ questao.id }}">{{questao.enunciado}}</option>
-        {% endfor %}
-    </select><br><br>
+        .form-label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
 
-    <input type="submit" value="Criar Exame">
-  </form>
-</body>
-</html>
+        .form-control {
+            padding: 10px;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .btn {
+            padding: 10px 15px;
+            border: 0;
+            border-radius: 4px;
+            color: #fff;
+            background-color: #007BFF;
+            cursor: pointer;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 0.875em;
+            margin-top: 5px;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">Criar Exame</h2>
+    <form method="post" action="{{ url_for('exam.create') }}">
+        {{ form.hidden_tag() }}
+        <div class="form-group mb-3">
+            {{ form.nome.label(class="form-label") }}
+            {{ form.nome(**{"class": "form-control", "id": "nome"}) }}
+            <div id="nomeError" class="text-danger"></div>
+        </div>
+        <div class="form-group mb-3">
+            {{ form.nota.label(class="form-label") }}
+            {{ form.nota(**{"class": "form-control", "id": "nota"}) }}
+            <div id="notaError" class="text-danger"></div>
+        </div>
+        <div class="form-group mb-3">
+            {{ form.data_abertura.label(class="form-label") }}
+            {{ form.data_abertura(**{"class": "form-control", "id": "data_abertura"}) }}
+            <div id="dataAberturaError" class="text-danger"></div>
+        </div>
+        <div class="form-group mb-3">
+            {{ form.data_fechamento.label(class="form-label") }}
+            {{ form.data_fechamento(**{"class": "form-control", "id": "data_fechamento"}) }}
+            <div id="dataFechamentoError" class="text-danger"></div>
+        </div>
+
+        <div class="form-group mb-3">
+            {{ form.questoes.label(class="form-label") }}
+            {{ form.questoes(**{"class": "form-control", "id": "questoes"}) }}
+            <div id="questoesError" class="text-danger"></div>
+        </div>
+        
+        <div class="form-group mb-3">
+            {{ form.submit(class="btn btn-primary") }}
+        </div>
+    </form>
+</div>
 {% endblock %}

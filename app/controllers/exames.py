@@ -1,7 +1,8 @@
 from ..app import db
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, redirect, request
 from ..models import Exame, Questao, QuestaoExame
-from flask_login import current_user
+from flask_login import current_user, login_required
+from ..forms import CriaExameForm
 
 bp = Blueprint("criacao_exames", __name__)
 
@@ -15,38 +16,44 @@ def index():
 # tentar fazer inserir questao_exame
 # tela simples -> criar/começar exame
 # form criar exame
-@bp.route("exam/create", methods=["GET"])
+@bp.route("/exam/new", methods=["GET"])
 @login_required
-def cria_exame_form(nome):
-
+def cria_exame_form():
+    
 
 
     return render_template("criacao_exame.html")
 
 
-@bp.route("exam/new", methods=["POST"])
+@bp.route("/exam/create", methods=["GET", "POST"])
 @login_required
-def cria_exame(nome):
+def cria_exame():
+    form = CriaExameForm()
     matricula = current_user.get_id()
+    questoes = Questao.query.filter_by(matricula=matricula).all()
+    form.questoes.choices = [(q.id, q.description) for q in Question.query.all()]
 
-    novo_exame = Exame(
-        nome=nome,
-        professor=1,  # todo
-        nota=10.0,
-        data_abertura=datetime.now(),
-        data_fechamento=datetime.now(),
-    )
-    db.session.add(novo_exame)
-    db.session.flush()
-    print(novo_exame.id)
-    for questao_id in questoes:
-        questao_exame = QuestaoExame(
-            exame_id=novo_exame.id, questao_id=questao_id, nota=questao_id * 10
+    if form.validate_on_submit():
+
+        novo_exame = Exame(nome=request.form.get("nome"),
+                           professor=matricula,
+                           nota=request.form.get("nota"),
+                           data_abertura=request.form.get("data_abertura"),
+                           data_fechamento=request.form.get("data_fechamento"),
         )
-        db.session.add(questao_exame)
-    db.session.commit()
+        db.session.add(novo_exame)
+        db.session.flush()
+        for questao in questoes:
+            questao_exame = QuestaoExame(exame_id=novo_exame.id,
+                                         questao_id=questao.id,
+                                         nota=questao.id * 10
+            )
+            db.session.add(questao_exame)
+        db.session.commit()
 
-    return 0
+        return redirect("/")
+
+    return render_template('criacao_exame.html', form=form)
 
 
 def insere_questao():

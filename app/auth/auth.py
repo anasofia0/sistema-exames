@@ -1,40 +1,36 @@
 from flask import Blueprint, render_template, redirect,request, url_for, flash
-from flask_login import login_required, login_user
+from flask_login import login_user
 from .form import RegisterForm, LoginForm
 from ..app import db
 from ..models.user import User  
 
-auth_bp = Blueprint("auth", __name__)
+bp = Blueprint("auth", __name__)
 
-@auth_bp.route("/", methods=["GET", "POST"])
+@bp.route("/", methods=["GET", "POST"])
 def index():
     return render_template("index.html")
 
 
-@auth_bp.route("/login", methods=["GET", "POST"])
+@bp.route("/login", methods=["GET", "POST"])
 def login():
-    form = LoginForm()
-    if form.validate_on_submit():
+    if request.method == "POST":
         matricula = request.form.get("matricula")
-        user = User.query.filter_by(matricula=matricula).first()
         senha = request.form.get("senha")
         remember = True if request.form.get("remember") else False
 
-        if not user or not int(user.senha) == int(senha):
-            print("Por favor verifique seus dados de login e tente novamente")
-            return redirect(url_for("auth.login")) # Se não exisitir o usuário ou a senha estiver errada, redireciona para a página de login
+        user = User.query.filter_by(matricula=matricula).first()
 
-        # se passar, faz o login e salva a sessão
+        if not user or not user.senha == senha:
+            flash("Please check your login details and try again.")
+            # Se não exisitir o usuário ou a senha estiver errada, redireciona para a página de login
+            return redirect(url_for("auth.login"))
+
+        # se passar no teste, faz o login e salva a sessão
         login_user(user, remember=remember)
-        if(user.professor):
-            print("Professor logado")
-            return redirect(url_for("dashboards.loggedProfessor"))
-        else:
-            print("Aluno logado")
-            return redirect(url_for("dashboards.loggedAluno"))
-    return render_template("login.html", form=form)  
+        return render_template("loggedIn.html", user=user) # se o login for bem sucedido, redireciona para a dashboard
+    return render_template("login.html")  
 
-@auth_bp.route("/register", methods=["GET", "POST"])
+@bp.route("/register", methods=["GET", "POST"])
 def register():
     form = RegisterForm()
     if form.validate_on_submit():
@@ -51,12 +47,11 @@ def register():
         created_user = User.query.filter_by(email=form.email.data).first()
 
         if created_user:
-            print("Usuário criado com sucesso!")
-            print("Detalhes do usuário:", created_user)
+            print("User created successfully!")
+            print("User details:", created_user)
         else:
-            print("Falha ao criar usuário.")
+            print("Failed to create user.")
 
         return redirect("/")
     
     return render_template("register.html", form=form)
-
