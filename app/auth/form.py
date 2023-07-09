@@ -73,3 +73,4 @@ class LoginForm(FlaskForm):
             ),
         ]
     )
+    submit = SubmitField('Entrar')

@@ -1,20 +1,71 @@
 {% extends "base.html" %}
 {% block title %}Login{% endblock %}
-{% block content%}
+
+{% block styles %}
+    {{ super() }}
+    <style>
+        body {
+            background: #f5f5f5;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .form-control {
+            padding: 10px;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .btn {
+            padding: 10px 15px;
+            border: 0;
+            border-radius: 4px;
+            color: #fff;
+            background-color: #007BFF;
+            cursor: pointer;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 0.875em;
+            margin-top: 5px;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">Login</h2>
     <form method="post" action="{{ url_for('auth.login') }}">
         {{ form.hidden_tag() }}
-        <div class="mx-auto p-2" style="width: 200px;">
-            <div class="mb-3">
-                <label for="matricula" class="form-label">Matrícula</label>
-                {{ form.matricula(**{"class": "form-control", "id": "matricula"}) }}
-            </div>
-            <div>
-                <label for="senha" class="form-label">Senha</label>
-                {{ form.senha(**{"class": "form-control", "id": "senha", "aria-labelledby": "passwordHelpBlock"}) }}
-            </div>
-            <div class="col-12">
-                <button class="btn btn-primary" type="submit">Entrar</button>
-            </div>
+        <div class="form-group mb-3">
+            {{ form.matricula.label(class="form-label") }}
+            {{ form.matricula(**{"class": "form-control", "id": "matricula"}) }}
+            <div id="matriculaError" class="text-danger"></div>
+        </div>
+        <div class="form-group mb-3">
+            {{ form.senha.label(class="form-label") }}
+            {{ form.senha(**{"class": "form-control", "id": "senha", "aria-labelledby": "passwordHelpBlock"}) }}
+            <div id="senhaError" class="text-danger"></div>
+        </div>
+        <div class="form-group mb-3">
+            {{ form.submit(class="btn btn-primary") }}
         </div>
     </form>
+</div>
 {% endblock %}
