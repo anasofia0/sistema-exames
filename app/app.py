@@ -26,7 +26,6 @@ def create_app():
         from .models.user import User
         from .models.exame import Exame
         from .models.questao import Questao
-        from .models.exameQuestao import ExameQuestao
         db.create_all()
     bootstrap.init_app(app)
 
