@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "chamada"
+name = "sistema de avaliacoes"
 version = "0.1.0"
 description = ""
 authors = ["anasofia0 <anasofialaranja@gmail.com>"]

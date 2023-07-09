@@ -25,6 +25,7 @@ def create_app():
     db.init_app(app)
     with app.app_context():
         from .models.user import User
+        from .models.exame import Exame
         db.create_all()
     bootstrap.init_app(app)
 
