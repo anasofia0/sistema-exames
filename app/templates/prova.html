@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% from 'bootstrap5/form.html' import render_form %}
+
+{% block title %}Register{% endblock %}
+{% block content%}
+
+{% if current_user.is_authenticated %}
+<!DOCTYPE html> 
+    <html> 
+        <head> 
+            <title>Prova</title> 
+            <style> body { font-family: Arial, sans-serif; background-color: #f2f2f2; }
+                .container {
+                    max-width: 800px;
+                    margin: 0 auto;
+                    padding: 20px;
+                    background-color: #fff;
+                    border-radius: 5px;
+                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                }
+            
+                h1 {
+                    text-align: center;
+                    color: #333;
+                }
+                
+                .question {
+                    margin-bottom: 20px;
+                }
+                
+                .question p {
+                    margin-bottom: 10px;
+                }
+                
+                .options label {
+                    display: block;
+                    margin-bottom: 10px;
+                }
+                
+                .submit-btn {
+                    display: block;
+                    margin: 20px auto;
+                    padding: 10px 20px;
+                    background-color: #333;
+                    color: #fff;
+                    border: none;
+                    border-radius: 5px;
+                    cursor: pointer;
+                }
+                
+                .submit-btn:hover {
+                    background-color: #555;
+                }
+            </style>
+        </head> <body> <div class="container"> <h1>Prova</h1>
+            <div class="question">
+                <p>1. Qual é a capital do Brasil?</p>
+                <div class="options">
+                    <label>
+                        <input type="radio" name="q1" value="a"> a) São Paulo
+                    </label>
+                    <label>
+                        <input type="radio" name="q1" value="b"> b) Rio de Janeiro
+                    </label>
+                    <label>
+                        <input type="radio" name="q1" value="c"> c) Brasília
+                    </label>
+                    <label>
+                        <input type="radio" name="q1" value="d"> d) Salvador
+                    </label>
+                </div>
+            </div>
+    
+
+
+
+        <div class="question">
+            <p>enunciado</p>
+            <div class="options">
+                <label>
+                    <input type="radio" name="q" value="a"> a) enunciado.a
+                </label>
+                <label>
+                    <input type="radio" name="q" value="b"> b) enunciado.b
+                </label>
+                <label>
+                    <input type="radio" name="q" value="c"> c) enunciado.c
+                </label>
+                <label>
+                    <input type="radio" name="q" value="d"> d) enunciado.d
+                </label>
+            </div>
+        </div>
+        
+        <button class="submit-btn">Enviar Respostas</button>
+        <!-- pega a resposta enviada pelo aluno e avança para a proxima questao -->
+        <!-- se n ouverem mais questões na prova encerra a prova -->
+    </div>
+</body> </html>
+{% endif %}
+{% endblock %}
+<!--  -->
