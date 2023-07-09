@@ -2,17 +2,20 @@ from datetime import datetime
 
 questoes = [
     {
-        "tipo_questao": "verdadeiro_falso",
+        "matricula_professor": 1234,
+        "tipo_questao": "VERDADEIRO_FALSO",
         "enunciado": "A água é molhada",
         "resposta_certa": "1"
     },
     {
-        "tipo_questao": "multipla_escolha",
+        "matricula_professor": 1234,
+        "tipo_questao": "MULTIPLA_ESCOLHA",
         "enunciado": "Qual das opções abaixo é a letra 'a'?",
         "resposta_certa": "a"
     },
     {
-        "tipo_questao": "entrada_numero",
+        "matricula_professor": 1234,
+        "tipo_questao": "ENTRADA_NUMERO",
         "enunciado": "Quantos dedos normalmente se tem em uma mão?",
         "resposta_certa": "5"
     },

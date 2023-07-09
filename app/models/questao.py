@@ -1,8 +1,9 @@
+import enum
 from . import db
 from sqlalchemy import Column, String, Integer, Float, DATETIME, Enum
 
 
-class TipoQuestao(Enum):
+class TipoQuestao(enum.Enum):
     VERDADEIRO_FALSO = "verdadeiro_falso"
     MULTIPLA_ESCOLHA = "multipla_escolha"
     ENTRADA_NUMERO = "entrada_numero"
@@ -12,7 +13,8 @@ class Questao(db.Model):
     __tablename__ = "questao"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    tipo_questao = Column(TipoQuestao, nullable=False)
+    matricula_professor = Column(Integer, nullable=False)
+    tipo_questao = Column(Enum(TipoQuestao), nullable=False)
     enunciado = Column(String, nullable=False)
     resposta_certa = Column(String, nullable=False)
 

@@ -6,7 +6,6 @@ from ..forms import CriaExameForm
 
 bp = Blueprint("criacao_exames", __name__)
 
-
 @bp.route("/", methods=["GET", "POST"])
 def index():
     return 0
@@ -30,11 +29,11 @@ def cria_exame_form():
 def cria_exame():
     form = CriaExameForm()
     matricula = current_user.get_id()
-    questoes = Questao.query.filter_by(matricula=matricula).all()
-    form.questoes.choices = [(q.id, q.description) for q in Question.query.all()]
+    questoes = Questao.query.filter_by(matricula_professor=matricula).all()
+    form.questoes.choices = [(q.id, q.enunciado) for q in questoes]
 
     if form.validate_on_submit():
-
+        print('aaaaaaaaaaaaaaaaaaaaaa')
         novo_exame = Exame(nome=request.form.get("nome"),
                            professor=matricula,
                            nota=request.form.get("nota"),
