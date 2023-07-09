@@ -2,14 +2,15 @@
 {% block title %}Login{% endblock %}
 {% block content%}
     <form method="post" action="{{ url_for('auth.login') }}">
+        {{ form.hidden_tag() }}
         <div class="mx-auto p-2" style="width: 200px;">
             <div class="mb-3">
                 <label for="matricula" class="form-label">Matrícula</label>
-                <input type="text" name="matricula" class="form-control" id="matricula">
+                {{ form.matricula(**{"class": "form-control", "id": "matricula"}) }}
             </div>
             <div>
                 <label for="senha" class="form-label">Senha</label>
-                <input type="password" name="senha" id="senha" class="form-control" aria-labelledby="passwordHelpBlock">
+                {{ form.senha(**{"class": "form-control", "id": "senha", "aria-labelledby": "passwordHelpBlock"}) }}
             </div>
             <div class="col-12">
                 <button class="btn btn-primary" type="submit">Entrar</button>
