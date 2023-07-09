@@ -5,7 +5,7 @@ from sqlalchemy import Column, String, Integer, Float, DATETIME, ForeignKey
 class Exame(db.Model):
     __tablename__ = "exame"
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     nome = Column(String(50), nullable=False)
     professor = Column(Integer, nullable=False) # todo
     nota = Column(Float, nullable=False)
