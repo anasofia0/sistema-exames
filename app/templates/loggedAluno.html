@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Index{% endblock %}
+{% block session %}
+<head>
+    <title>Logado Aluno</title>
+</head>
+<body>
+    <h2>Olá {{session.nome}}</h2>
+    <a href="/logout">Sair</a>
+</body>
+{% endblock %}

@@ -59,7 +59,7 @@
 
 {% block content %}
 <div class="container">
-    <h2 class="mb-4">Register</h2>
+    <h2 class="mb-4">Cadastro</h2>
     <form method="POST" id="registerForm">
         {{ form.hidden_tag() }}
         <div class="form-group mb-3">
@@ -133,34 +133,34 @@
 
         // validate nome field
         if (nomeField.value === '') {
-            event.preventDefault();
             nomeError.textContent = 'Nome é obrigatório';
+            event.preventDefault();
         }
 
         // validate matricula field
         if (matriculaField.value === '' || !matriculaPattern.test(matriculaField.value)) {
-            event.preventDefault();
             matriculaError.textContent = 'Matricula deve conter somente digitos numéricos';
+            event.preventDefault();
         }
 
         // validate email field
         if (emailField.value === '' || !emailPattern.test(emailField.value)) {
-            event.preventDefault();
             emailError.textContent = 'Inserir endereço de e-mail válido';
+            event.preventDefault();
         }
 
         // validate senha field
         if (senhaField.value.length < 6 || senhaField.value.length > 20) {
-            event.preventDefault();
             senhaError.textContent = 'Senhas com no mínimo 6 caracteres e máximo 20';
+            event.preventDefault();
         }
 
         // if professor is checked
         if (professorCheckbox.checked) {
             // validate professor_code
             if (professorCodeField.value !== "debugmode") {
+                professorCodeError.textContent = "Codigo de professor inválido.";
                 event.preventDefault();
-                professorCodeError.textContent = "Invalid professor code.";
             }
         }
     });
