@@ -1,3 +1,6 @@
 {
-    "git.enabled": true
+    "git.enabled": true,
+    "python.analysis.extraPaths": [
+        "./app/models"
+    ]
 }

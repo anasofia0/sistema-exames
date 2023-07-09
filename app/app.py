@@ -7,10 +7,9 @@ from flask_swagger import swagger
 import os
 
 
-db: SQLAlchemy = SQLAlchemy()
+db = SQLAlchemy()
 bootstrap = Bootstrap()
 login_manager = LoginManager()
-
 
 def create_app():
     app = Flask(__name__)
@@ -26,6 +25,8 @@ def create_app():
     with app.app_context():
         from .models.user import User
         from .models.exame import Exame
+        from .models.questao import Questao
+        from .models.exameQuestao import ExameQuestao
         db.create_all()
     bootstrap.init_app(app)
 
@@ -35,7 +36,6 @@ def create_app():
 
     from .auth.auth import auth_bp
     app.register_blueprint(auth_bp)
-    
     from .controllers import blueprints
     for bp in blueprints():
         app.register_blueprint(bp)
