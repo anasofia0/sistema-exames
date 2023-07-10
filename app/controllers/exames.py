@@ -1,3 +1,4 @@
+from datetime import datetime
 from ..app import db
 from flask import Blueprint, render_template, redirect, request
 from ..models import Exame, Questao, QuestaoExame
@@ -33,12 +34,11 @@ def cria_exame():
     form.questoes.choices = [(q.id, q.enunciado) for q in questoes]
 
     if form.validate_on_submit():
-        print('aaaaaaaaaaaaaaaaaaaaaa')
         novo_exame = Exame(nome=request.form.get("nome"),
                            professor=matricula,
                            nota=request.form.get("nota"),
-                           data_abertura=request.form.get("data_abertura"),
-                           data_fechamento=request.form.get("data_fechamento"),
+                           data_abertura=form.data_abertura.data,
+                           data_fechamento=form.data_fechamento.data,
         )
         db.session.add(novo_exame)
         db.session.flush()
@@ -50,8 +50,8 @@ def cria_exame():
             db.session.add(questao_exame)
         db.session.commit()
 
-        return redirect("/")
-
+        return redirect("/logged/professor")
+    print(form.errors)
     return render_template('criacao_exame.html', form=form)
 
 

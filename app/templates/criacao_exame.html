@@ -3,7 +3,11 @@
 
 {% block styles %}
     {{ super() }}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" />
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
     <style>
+        
         body {
             background: #f5f5f5;
             font-family: Arial, sans-serif;
@@ -85,4 +89,35 @@
         </div>
     </form>
 </div>
+{% endblock %}
+
+
+{% block scripts %}
+    {{ super() }}
+    <!-- Include JS for JQuery, JQuery UI and Select2 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
+
+    <!-- Add datepicker and timepicker -->
+    <script>
+        $(function () {
+            $("#data_abertura").datetimepicker({
+                format:'d/m/Y H:i:s',
+                onChangeDateTime: function(dp, $input){
+                    $input.val(dp.format('d/m/Y H:i:s'));
+                }
+            });
+
+            $("#data_fechamento").datetimepicker({
+                format:'d/m/Y H:i:s',
+            });
+            $('#questoes').select2({
+                placeholder: 'Selecione as questões',
+                allowClear: true
+            });
+        });
+        
+    </script>
 {% endblock %}
