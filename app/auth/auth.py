@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, redirect,request, url_for, flash
-from flask_login import login_required, login_user
+from flask_login import login_required, login_user, logout_user
 from .form import RegisterForm, LoginForm
 from ..app import db
 from ..models.user import User  
@@ -59,3 +59,9 @@ def register():
         return redirect("/")
     
     return render_template("register.html", form=form)
+
+@auth_bp.route("/logout", methods=["GET", "POST"])
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for("auth.login")) #desloga o usuário e redireciona para a página de login
