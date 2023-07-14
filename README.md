@@ -39,6 +39,14 @@ Siga as instruções abaixo para executar a aplicação em um sistema limpo:
 
 7. A aplicação estará disponível em http://localhost:5000.
 
+8. Para fazer a seed do banco de dados use:
+
+   ```
+   flask seed users
+   flask seed questoes
+   flask seed exames
+   ```
+
 Certifique-se de que as portas necessárias estejam liberadas e que não haja conflitos com outros serviços em execução.
 
 Nota: Lembre-se de configurar corretamente as informações de conexão com o banco de dados no arquivo de configuração do projeto, caso seja necessário.
