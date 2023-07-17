@@ -27,14 +27,14 @@ users = [
         "nome": "pedro",
         "email": "pedro@unb.br",
         "professor": True,
-        "senha": "asdfg"
+        "senha": "asdfgh"
     },
     {
         "matricula": "1",
         "nome": "ester",
         "email": "ester@unb.br",
         "professor": False,
-        "senha": "asdfg"
+        "senha": "asdfgh"
     }
 ]
 
