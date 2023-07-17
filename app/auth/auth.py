@@ -20,7 +20,7 @@ def login():
         senha = request.form.get("senha")
         remember = True if request.form.get("remember") else False
 
-        if not user or not int(user.senha) == int(senha):
+        if not user or user.senha != senha:
             print("Por favor verifique seus dados de login e tente novamente")
             return redirect(url_for("auth.login")) # Se não exisitir o usuário ou a senha estiver errada, redireciona para a página de login
 
