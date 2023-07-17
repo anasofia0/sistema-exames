@@ -1,5 +1,5 @@
 from . import db
-from sqlalchemy import Column, String, Integer, Float, DATETIME, ForeignKey
+from sqlalchemy import Column, String, Integer, Float, DATETIME, ForeignKey, Interval
 
 
 class Exame(db.Model):
@@ -11,6 +11,7 @@ class Exame(db.Model):
     nota = Column(Float, nullable=False)
     data_abertura = Column(DATETIME, nullable=False)
     data_fechamento = Column(DATETIME, nullable=False)
+    duracao = Column(Integer, nullable=True)
 
     questoes = db.relationship("Questao", secondary="questao_exame", back_populates="exames") # many to many
 

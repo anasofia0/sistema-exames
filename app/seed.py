@@ -44,7 +44,8 @@ exames = [
         "professor": 1234,
         "nota": 10,
         "data_abertura": datetime.now(),
-        "data_fechamento": datetime.now()
+        "data_fechamento": datetime.now(),
+        "duracao": 3600
     }
 ]
 

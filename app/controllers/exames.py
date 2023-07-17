@@ -1,4 +1,3 @@
-from datetime import datetime
 from ..app import db
 from flask import Blueprint, render_template, redirect, request
 from ..models import Exame, Questao, QuestaoExame
@@ -39,6 +38,7 @@ def cria_exame():
                            nota=request.form.get("nota"),
                            data_abertura=form.data_abertura.data,
                            data_fechamento=form.data_fechamento.data,
+                           duracao = datetime2int(form.duracao.data)
         )
         db.session.add(novo_exame)
         db.session.flush()
@@ -54,6 +54,5 @@ def cria_exame():
     print(form.errors)
     return render_template('criacao_exame.html', form=form)
 
-
-def insere_questao():
-    pass
+def datetime2int(datetime):
+    return 3600*datetime.hour + 60*datetime.minute + datetime.second
