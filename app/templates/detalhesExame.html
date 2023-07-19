@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container">
+        <h1>{{ exam.get_name() }}</h1>
+        <p>Pontuação: {{ exam.nota }}</p> <!-- Replace with the correct attribute for grade -->
+        <a href="{{ url_for('criacao_exames.comeca_exame', id=exam.get_id(), question_index=0) }}" class="btn btn-primary">Iniciar Exame</a>
+    </div>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>{{ exam.get_name() }}</h1>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        {% if question_type == 'verdadeiro_falso' %}
+            <p>Select whether the following statement is true or false:</p>
+            {{ form.resposta.label }} {{ form.resposta }}
+        {% elif question_type == 'multipla_escolha' %}
+            <p>Select one of the following options:</p>
+            {{ form.resposta.label }} {{ form.resposta }}
+        {% elif question_type == 'entrada_numero' %}
+            <p>Enter your answer:</p>
+            {{ form.resposta.label }} {{ form.resposta }}
+        {% endif %}
+        {{ form.submit() }}
+    </form>
+{% endblock %}

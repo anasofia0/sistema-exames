@@ -5,7 +5,7 @@
 
   <ul>
     {% for exam in exams %}
-      <li><a href="{{ url_for('exam', id=exam.id) }}">{{ exam.nome }}</a></li>
+      <li><a href="{{ url_for('criacao_exames.detalhes_exame', id=exam.id) }}">{{ exam.nome }}</a></li>
     {% endfor %}
   </ul>
 {% endblock %}

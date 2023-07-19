@@ -13,6 +13,12 @@ class Exame(db.Model):
     data_fechamento = Column(DATETIME, nullable=False)
 
     questoes = db.relationship("Questao", secondary="questao_exame", back_populates="exames") # many to many
+    def get_id(self):
+        return str(self.id)
+
+    # get_name method
+    def get_name(self):
+        return self.nome
 
 class QuestaoExame(db.Model):
     __tablename__ = "questao_exame"

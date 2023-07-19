@@ -1,5 +1,7 @@
 from datetime import datetime
 
+from app.forms import form_questao
+
 from ..app import db
 from flask import (
     Blueprint,
@@ -11,7 +13,7 @@ from flask import (
     redirect,
     url_for,
 )
-from ..models import Exame, Questao, QuestaoExame, RespostaAluno
+from ..models import Exame, Questao, QuestaoExame, RespostaAluno, questao
 from flask_login import current_user, login_required
 from ..forms import CriaExameForm, form_resposta_aluno
 from ..services.salvar_resposta_aluno import save_student_answer
@@ -72,9 +74,18 @@ def lista_exames():
     # Renderiza a tela de exames
     return render_template("listaExames.html", exams=exams)
 
+@bp.route('/exam/<int:id>', methods=['GET'])
+def detalhes_exame(id):
+    exam = Exame.query.get(id)
+    if exam is None:
+        abort(404, description="Exame não encontrado")
+    return render_template('detalhesExame.html', exam=exam)
+
+
+
 
 @bp.route("/exam/<int:id>/<int:question_index>", methods=["GET", "POST"])
-def exame(id, question_index):
+def comeca_exame(id, question_index):
     # Procura o exame na base de dados
     exam = Exame.query.get(id)
 
@@ -86,15 +97,15 @@ def exame(id, question_index):
     question = exam.questoes[question_index]
 
     # Creia o form apropriado para o tipo de questão
-    if question.tipo_questao == form_resposta_aluno.TipoQuestao.VERDADEIRO_FALSO:
-        form = form_resposta_aluno.RespostaVFForm()
-    elif question.tipo_questao == form_resposta_aluno.TipoQuestao.MULTIPLA_ESCOLHA:
-        form = form_resposta_aluno.RespostaMultiplaEscolhaForm()
+    if question.tipo_questao == questao.TipoQuestao.VERDADEIRO_FALSO:
+        form = form_questao.RespostaVFForm()
+    elif question.tipo_questao == questao.TipoQuestao.MULTIPLA_ESCOLHA:
+        form =  form_questao.RespostaMultiplaEscolhaForm()
         form.resposta.choices = [
             (option.value, option.label) for option in question.opcoes
         ]
-    elif question.tipo_questao == form_resposta_aluno.TipoQuestao.ENTRADA_NUMERO:
-        form = form_resposta_aluno.RespostaNumericoForm()
+    elif question.tipo_questao ==  questao.TipoQuestao.ENTRADA_NUMERO:
+        form =  form_questao.RespostaNumericoForm()
     else:
         abort(400)  # ERROR 400 BAD REQUEST
 
@@ -110,7 +121,7 @@ def exame(id, question_index):
             # Reduirecionar para a pagina de revisao
             return redirect(url_for('revisao', id=id))
     # Renderiza a pagina do exame, passando o exame, a questão e o form para o template
-    return render_template("exam.html", exam=exam, question=question, form=form)
+    return render_template("relizarExame.html", exam=exam, question=question, form=form)
 
 @bp.route('/exam/review/<int:id>', methods=['GET'])
 def revisao(id):
