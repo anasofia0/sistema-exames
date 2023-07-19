@@ -14,8 +14,3 @@ def loggedAluno():
 def loggedProfessor():
     return render_template("loggedProfessor.html") # se o login for bem sucedido, redireciona para a dashboard
 
-@bp.route("/logout", methods=["GET", "POST"])
-@login_required
-def logout():
-    logout_user()
-    return redirect(url_for("auth.login")) #desloga o usuário e redireciona para a página de login

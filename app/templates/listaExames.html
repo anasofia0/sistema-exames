@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Provas Não realizadas</h1>
+
+  <ul>
+    {% for exam in exams %}
+      <li><a href="{{ url_for('criacao_exames.detalhes_exame', id=exam.id) }}">{{ exam.nome }}</a></li>
+    {% endfor %}
+  </ul>
+{% endblock %}

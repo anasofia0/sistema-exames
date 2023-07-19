@@ -1,6 +1,18 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SelectField, DecimalField, SubmitField
+from wtforms import (
+    StringField,
+    SelectField,
+    DecimalField,
+    SubmitField,
+    FieldList,
+    FormField,
+)
 from wtforms.validators import DataRequired
+
+
+class OpcaoForm(FlaskForm):
+    value = StringField("Value", validators=[DataRequired()])
+    label = StringField("Label", validators=[DataRequired()])
 
 
 class CriacaoVFForm(FlaskForm):
@@ -41,6 +53,16 @@ class CriacaoMultiplaEscolhaForm(FlaskForm):
     nota = DecimalField(validators=[DataRequired()])
 
 
-# class MultiplaEscolhaForm(FlaskForm):
-#     enunciado = StringField('Enunciado', validators=[DataRequired()])
-#     items =
+class CriacaoMultiplaEscolhaForm(FlaskForm):
+    enunciado = StringField("Enunciado", validators=[DataRequired()])
+    resposta = StringField("Resposta", validators=[DataRequired()])  # Resposta correta
+    opcoes = FieldList(FormField(OpcaoForm), min_entries=1)  # Opcoes de resposta
+    nota = DecimalField(validators=[DataRequired()])
+    submit = SubmitField("Criar questão")
+
+
+class RespostaMultiplaEscolhaForm(FlaskForm):
+    resposta = SelectField(
+        "Resposta", coerce=str, validators=[DataRequired()]
+    )  # Resposta do estudante
+    submit = SubmitField("Salvar resposta")

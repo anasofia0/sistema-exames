@@ -2,5 +2,10 @@
     "git.enabled": true,
     "python.analysis.extraPaths": [
         "./app/models"
-    ]
+    ],
+    "files.autoSave": "onFocusChange",
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.black-formatter"
+    },
+    "python.formatting.provider": "none"
 }
