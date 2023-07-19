@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Review of {{ exam.nome }}</h1>
+
+  <ul>
+    {% for answer in answers %}
+      <li>
+        <h2>Question {{ loop.index }}</h2>
+        <p>{{ answer.questao.enunciado }}</p>
+        <p>Your answer: {{ answer.resposta }}</p>
+      </li>
+    {% endfor %}
+  </ul>
+
+  <a href="{{ url_for('submit_exam', id=exam.id) }}">Submit Exam</a>
+{% endblock %}

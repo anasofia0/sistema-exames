@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>{{ exam.nome }}</h1>
+
+  <h2>Questão {{ question_index + 1 }}</h2>
+  <p>{{ question.enunciado }}</p>
+
+  <form method="POST">
+    {{ form.hidden_tag() }}
+    <p>{{ form.resposta.label }}: {{ form.resposta() }}</p>
+    {% if form.resposta.errors %}
+      <ul class="errors">
+        {% for error in form.resposta.errors %}
+          <li>{{ error }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+    <p><input type="submit" value="Submit Answer"></p>
+  </form>
+
+  {% if question_index > 0 %}
+    <a href="{{ url_for('exam', id=exam.id, question_index=question_index - 1) }}">Anterior</a>
+  {% endif %}
+  {% if question_index < len(exam.questoes) - 1 %}
+    <a href="{{ url_for('exam', id=exam.id, question_index=question_index + 1) }}">Próximo</a>
+  {% endif %}
+{% endblock %}
