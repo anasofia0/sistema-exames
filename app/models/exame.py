@@ -30,3 +30,15 @@ class QuestaoExame(db.Model):
 
     #questao = db.relationship("Questao", back_populates="questao")
     #exame = db.relationship("Exame", back_populates="exame")
+
+class Nota(db.Model):
+    __tablename__ = "nota"
+
+    id = db.Column(db.Integer, primary_key=True)
+    matricula_aluno = db.Column(db.Integer, db.ForeignKey('user.matricula'), nullable=False)
+    exame_id = db.Column(db.Integer, db.ForeignKey('exame.id'), nullable=False)
+    nota = db.Column(db.Float, nullable=False)  # Changed from Integer to Float
+
+    aluno = db.relationship('User', backref=db.backref('notas', lazy=True))
+    exame = db.relationship('Exame', backref=db.backref('notas', lazy=True))
+

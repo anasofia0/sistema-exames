@@ -2,6 +2,8 @@ from datetime import datetime
 from decimal import Decimal
 
 from app.forms import form_questao
+from app.services import calcular_nota
+from ..models.exame import Nota
 
 from ..app import db
 from flask import (
@@ -17,7 +19,7 @@ from flask import (
 from ..models import Exame, Questao, QuestaoExame, RespostaAluno, questao
 from flask_login import current_user, login_required
 from ..forms import CriaExameForm
-from ..services.salvar_resposta_aluno import save_student_answer
+from ..services.salvar_resposta import save_student_answer
 from datetime import datetime
 
 bp = Blueprint("exames", __name__)
@@ -168,26 +170,43 @@ def revisao(id):
     #Renderiza a pagina de revisao
     return render_template('revisao.html', exam=exam, answers=answers)
 
-@bp.route("/exam/submit/<int:id>", methods=["GET", "POST"])
+@bp.route("/exam/submit/<int:id>", methods=["POST", "GET"])
 @login_required
 def enviar_exame(id):
-    exam = Exame.query.get(id)
+    exame = Exame.query.get(id)
 
-    # Se não existir o exame retorna 404
-    if exam is None:
+    if exame is None:
         abort(404)
+    nota = calcular_nota.calcular_nota_aluno(exame.id, current_user.matricula)
+    nota_instance = Nota.query.filter_by(matricula_aluno=current_user.matricula, exame_id=exame.id).first()
+    if nota_instance:
+        nota_instance.nota = nota
+    else:
+        nota_instance = Nota(matricula_aluno=current_user.matricula, exame_id=exame.id, nota=nota)
+        db.session.add(nota_instance)
 
-    # Não deixa o aluno fazer mais o exame
-    # exam.locked = True
-
-    # Calculate the student's grade
-    # exam.grade = calcular_nota(exam)
-
-    # Commit the changes to the database
     db.session.commit()
 
-    # Redireciona o estudante para a página inicial
     return redirect(url_for("dashboards.loggedAluno"))
+
+
+@bp.route("/grades", methods=["GET"])
+@login_required
+def ver_notas():
+    notas = Nota.query.filter_by(matricula_aluno=current_user.matricula).all()
+    dados_exame = []
+
+    for nota in notas:
+        respostas_aluno = RespostaAluno.query.filter_by(id_exame=nota.exame_id, id_aluno=current_user.matricula).all()
+        dados_exame.append({
+            "exame": nota.exame,
+            "nota": nota,
+            "respostas_aluno": respostas_aluno
+        })
+
+    return render_template("notas.html", dados_exame=dados_exame)
+
+
 
 
 def datetime2int(datetime):
@@ -198,3 +217,5 @@ def checa_datas(data_abertura, data_fechamento):
         raise ValueError('Data de abertura depois da data de fechamento')
     if (data_abertura-datetime.now()).total_seconds() < 60:
         raise ValueError('Data de abertura com mínimo de um minuto de diferença do momento atual')
+    
+    

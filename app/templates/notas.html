@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Notas{% endblock %}
+
+{% block content %}
+<style>
+    .container {
+        width: 80%;
+        margin: auto;
+        padding: 20px;
+    }
+    .card {
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        margin-bottom: 10px;
+        padding: 20px;
+        background-color: #f9f9f9;
+        transition: background-color 0.2s ease;
+    }
+    .card:hover {
+        background-color: #f0f0f0;
+    }
+    .card-header {
+        margin-bottom: 10px;
+    }
+    .collapse {
+        display: none;
+    }
+</style>
+
+<div class="container">
+    <h2 class="mb-4">Notas</h2>
+    {% for dados in dados_exame %}
+    <div class="card" onclick="toggleDetails(this)">
+        <div class="card-header">
+            <h3 class="mb-0">{{ dados.exame.nome }}</h3>
+        </div>
+        <div class="card-body">
+            <p class="mb-0">Nota: {{ dados.nota.nota }}</p>
+        </div>
+        <div class="collapse">
+            <h4>Revisão:</h4>
+            {% for resposta_aluno in dados.respostas_aluno %}
+                <p><strong>Questão {{ loop.index }}:</strong> {{ resposta_aluno.questao.enunciado }}</p>
+                <p>Sua resposta: {{ resposta_aluno.resposta }}</p>
+                <p>Resposta correta: {{ resposta_aluno.questao.resposta_certa }}</p>
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<script>
+    function toggleDetails(element) {
+        var details = element.querySelector(".collapse");
+        if (details.style.display === "none") {
+            details.style.display = "block";
+        } else {
+            details.style.display = "none";
+        }
+    }
+</script>
+{% endblock %}
