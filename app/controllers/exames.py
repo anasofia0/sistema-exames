@@ -1,4 +1,5 @@
 from datetime import datetime
+from decimal import Decimal
 
 from app.forms import form_questao
 
@@ -15,10 +16,10 @@ from flask import (
 )
 from ..models import Exame, Questao, QuestaoExame, RespostaAluno, questao
 from flask_login import current_user, login_required
-from ..forms import CriaExameForm, form_resposta_aluno
+from ..forms import CriaExameForm
 from ..services.salvar_resposta_aluno import save_student_answer
 
-bp = Blueprint("criacao_exames", __name__)
+bp = Blueprint("exames", __name__)
 
 
 @bp.route("/", methods=["GET", "POST"])
@@ -67,6 +68,7 @@ def cria_exame():
 
 
 @bp.route("/exam/list", methods=["GET"])
+@login_required
 def lista_exames():
     # Mostra todos os escames disponíveis
     exams = Exame.query.all()
@@ -75,6 +77,7 @@ def lista_exames():
     return render_template("listaExames.html", exams=exams)
 
 @bp.route('/exam/<int:id>', methods=['GET'])
+@login_required
 def detalhes_exame(id):
     exam = Exame.query.get(id)
     if exam is None:
@@ -85,6 +88,7 @@ def detalhes_exame(id):
 
 
 @bp.route("/exam/<int:id>/<int:question_index>", methods=["GET", "POST"])
+@login_required
 def comeca_exame(id, question_index):
     # Procura o exame na base de dados
     exam = Exame.query.get(id)
@@ -96,44 +100,87 @@ def comeca_exame(id, question_index):
     # Pega a questão atual do exame
     question = exam.questoes[question_index]
 
-    # Creia o form apropriado para o tipo de questão
+    # Cria o form apropriado para o tipo de questão
     if question.tipo_questao == questao.TipoQuestao.VERDADEIRO_FALSO:
+        print("VERDADEIRO_FALSO")
         form = form_questao.RespostaVFForm()
     elif question.tipo_questao == questao.TipoQuestao.MULTIPLA_ESCOLHA:
+        print("MULTIPLA_ESCOLHA")
         form =  form_questao.RespostaMultiplaEscolhaForm()
         form.resposta.choices = [
-            (option.value, option.label) for option in question.opcoes
+            (option, option) for option in question.opcoes
         ]
     elif question.tipo_questao ==  questao.TipoQuestao.ENTRADA_NUMERO:
+        print("ENTRADA_NUMERO")
         form =  form_questao.RespostaNumericoForm()
     else:
         abort(400)  # ERROR 400 BAD REQUEST
+        
+    if request.method == 'GET':
+        previous_answer = RespostaAluno.query.filter_by(id_exame=exam.id, id_questao=question.id, id_aluno=current_user.matricula).first()
+        if previous_answer:
+            if question.tipo_questao == questao.TipoQuestao.VERDADEIRO_FALSO:
+                # Convert the previous answer to a boolean
+                form.resposta.data = previous_answer.resposta
+            elif question.tipo_questao == questao.TipoQuestao.MULTIPLA_ESCOLHA:
+                # Convert the previous answer to an integer
+                form.resposta.data = str(previous_answer.resposta)
+            elif question.tipo_questao == questao.TipoQuestao.ENTRADA_NUMERO:
+                # Convert the previous answer to a decimal
+                form.resposta.data = Decimal(previous_answer.resposta)
 
+    
     # Se o form enviado for valido, salva a resposta do aluno
     if form.validate_on_submit():
-        save_student_answer(exam.id, question.id, current_user.id, form.resposta.data)
+        print("VALIDO")
+        save_student_answer(exam.id, question.id, current_user.matricula, str(form.resposta.data))
+
         prox_questao = question_index + 1
         if prox_questao < len(exam.questoes):
             # Ir para proxima questavao
-            return redirect(url_for("exame", id=id, question_index=prox_questao))
+            return redirect(url_for("exames.comeca_exame", id=id, question_index=prox_questao))
         else:
             # A prova acabou
-            # Reduirecionar para a pagina de revisao
-            return redirect(url_for('revisao', id=id))
+            # Redirecionar para a pagina de revisao
+            return redirect(url_for('exames.revisao', id=id))
     # Renderiza a pagina do exame, passando o exame, a questão e o form para o template
-    return render_template("relizarExame.html", exam=exam, question=question, form=form)
+    return render_template("relizarExame.html", exam=exam, question=question, form=form, question_index=question_index)
+
 
 @bp.route('/exam/review/<int:id>', methods=['GET'])
+@login_required
 def revisao(id):
     exam = Exame.query.get(id)
     if exam is None:
         abort(404)
 
     # Procura pelas respostas do aluno
-    answers = RespostaAluno.query.filter_by(id_exame=exam.id, id_aluno=current_user.id).all()
+    answers = RespostaAluno.query.filter_by(id_exame=exam.id, id_aluno=current_user.matricula).all()
     
     #Renderiza a pagina de revisao
     return render_template('revisao.html', exam=exam, answers=answers)
+
+@bp.route("/exam/submit/<int:id>", methods=["GET", "POST"])
+@login_required
+def enviar_exame(id):
+    exam = Exame.query.get(id)
+
+    # Se não existir o exame retorna 404
+    if exam is None:
+        abort(404)
+
+    # Não deixa o aluno fazer mais o exame
+    # exam.locked = True
+
+    # Calculate the student's grade
+    # exam.grade = calcular_nota(exam)
+
+    # Commit the changes to the database
+    db.session.commit()
+
+    # Redireciona o estudante para a página inicial
+    return redirect(url_for("dashboards.loggedAluno"))
+
 
 
 def insere_questao():

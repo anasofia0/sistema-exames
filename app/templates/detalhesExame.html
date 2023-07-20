@@ -1,9 +1,48 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <div class="container">
-        <h1>{{ exam.get_name() }}</h1>
-        <p>Pontuação: {{ exam.nota }}</p> <!-- Replace with the correct attribute for grade -->
-        <a href="{{ url_for('criacao_exames.comeca_exame', id=exam.get_id(), question_index=0) }}" class="btn btn-primary">Iniciar Exame</a>
+    <style>
+        .exam-detail-container {
+            width: 80%;
+            height: auto;
+            margin: auto;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            background-color: #f5f5f5;
+        }
+
+        .exam-detail-title {
+            text-align: center;
+            color: #333;
+        }
+
+        .exam-detail-text {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .exam-start-button {
+            display: block;
+            width: 200px;
+            height: 50px;
+            margin: 20px auto;
+            background-color: #444;
+            color: #fff;
+            text-align: center;
+            line-height: 50px;
+            font-size: 1.2rem;
+            text-decoration: none;
+        }
+
+        .exam-start-button:hover {
+            background-color: #333;
+        }
+    </style>
+
+    <div class="exam-detail-container">
+        <h1 class="exam-detail-title">{{ exam.get_name() }}</h1>
+        <p class="exam-detail-text">Pontuação: {{ exam.nota }}</p> <!-- Replace with the correct attribute for grade -->
+        <a href="{{ url_for('exames.comeca_exame', id=exam.get_id(), question_index=0) }}" class="exam-start-button">Iniciar Exame</a>
     </div>
 {% endblock %}

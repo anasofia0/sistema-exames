@@ -1,11 +1,52 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1>Provas Não realizadas</h1>
+    <style>
+        .exam-list-container {
+            width: 80%;
+            height: auto;
+            margin: auto;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            background-color: #f5f5f5;
+        }
 
-  <ul>
-    {% for exam in exams %}
-      <li><a href="{{ url_for('criacao_exames.detalhes_exame', id=exam.id) }}">{{ exam.nome }}</a></li>
-    {% endfor %}
-  </ul>
+        .exam-list-title {
+            text-align: center;
+            color: #333;
+        }
+
+        .exam-item {
+            outline: thin solid #eee;
+            list-style: none;
+            font: 1.2rem/2rem Serif;
+            margin-bottom: 10px;
+        }
+
+        .exam-link {
+            box-sizing: border-box;
+            background-color: #444;
+            display: inline-block;
+            width: 100%;
+            padding: 10px 20px;
+            color: white;
+            text-decoration: none;
+        }
+
+        .exam-link:hover {
+            background-color: #333;
+        }
+    </style>
+
+    <div class="exam-list-container">
+        <h1 class="exam-list-title">Provas Não realizadas</h1>
+
+        <ul>
+            {% for exam in exams %}
+                <li class="exam-item">
+                    <a href="{{ url_for('exames.detalhes_exame', id=exam.id) }}" class="exam-link">{{ exam.nome }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
 {% endblock %}

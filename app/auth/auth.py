@@ -41,7 +41,7 @@ def register():
 
         user = User(matricula = form.matricula.data,
                     nome = form.nome.data,
-                    email = form.email.data,
+                    email = form.email.data,     
                     professor = form.professor.data,
                     senha = form.senha.data # poderiamos usar um hash, mas como é algo simples, não vamos nos preocupar com isso
         )

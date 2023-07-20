@@ -1,6 +1,6 @@
 from flask import Flask, redirect, url_for, Blueprint
-from .app.models import exame, questao
-from .app.app import db
+from ..models import exame, questao
+from ..app import db
 from datetime import datetime, timedelta
 
 
@@ -38,18 +38,24 @@ def create_exam():
     db.session.add(num_question)
 
     # Create a multipla_escolha question
-    me_question = questao.Questao(
-        matricula_professor=1,
+    new_question = questao.Questao(
+        matricula_professor=1234,  # Replace with the actual professor's ID
         tipo_questao=questao.TipoQuestao.MULTIPLA_ESCOLHA,
-        enunciado='What is the capital of France?',
-        resposta_certa='Paris'
+        enunciado="What is the capital of France?",
+        resposta_certa="Paris",
+        opcoes=[
+            "London",
+            "Berlin",
+            "Paris",
+            "Rome",
+        ],
     )
-    db.session.add(me_question)
+    db.session.add(new_question)
 
     # Add the questions to the exam
     vf_questao_exame = exame.QuestaoExame(exame_id=new_exame.id, questao_id=vf_question.id, nota=0.0)
     num_questao_exame = exame.QuestaoExame(exame_id=new_exame.id, questao_id=num_question.id, nota=0.0)
-    me_questao_exame = exame.QuestaoExame(exame_id=new_exame.id, questao_id=me_question.id, nota=0.0)
+    me_questao_exame = exame.QuestaoExame(exame_id=new_exame.id, questao_id=new_question.id, nota=0.0)
 
     db.session.add(vf_questao_exame)
     db.session.add(num_questao_exame)
