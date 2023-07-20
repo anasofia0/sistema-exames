@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Criar questões{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">Criar Exame</h2>
+    <form method="post" action="{{ url_for('criacao_exames.cria_exame') }}">
+        {{ form.hidden_tag() }}
+        <div class="form-group mb-3">
+            {{ form.enunciado.label(class="form-label") }}
+            {{ form.enunciado(class="form-control", id="enunciado") }}
+            <div id="enunciadoError" class="text-danger"></div>
+        </div>
+
+        <div class="form-group mb-3">
+            {{ form.resposta.label(class="form-label") }}
+            {{ form.resposta(class="form-control", id="resposta") }}
+            <div id="respostaError" class="text-danger"></div>
+        </div>
+        
+        <div class="form-group mb-3">
+            {{ form.submit(class="btn btn-primary") }}
+        </div>
+    </form>
+</div>
+{% endblock %}

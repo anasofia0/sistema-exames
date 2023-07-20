@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from app.forms import form_questao
 
 from ..app import db
@@ -25,16 +23,6 @@ bp = Blueprint("criacao_exames", __name__)
 @bp.route("/", methods=["GET", "POST"])
 def index():
     return 0
-
-
-# inserir questoes para testar
-# tentar fazer inserir questao_exame
-# tela simples -> criar/começar exame
-# form criar exame
-@bp.route("/exam/new", methods=["GET"])
-@login_required
-def cria_exame_form():
-    return render_template("criacao_exame.html")
 
 
 @bp.route("/exam/create", methods=["GET", "POST"])
@@ -104,7 +92,7 @@ def comeca_exame(id, question_index):
     # Pega a questão atual do exame
     question = exam.questoes[question_index]
 
-    # Creia o form apropriado para o tipo de questão
+    # Cria o form apropriado para o tipo de questão
     if question.tipo_questao == questao.TipoQuestao.VERDADEIRO_FALSO:
         form = form_questao.RespostaVFForm()
     elif question.tipo_questao == questao.TipoQuestao.MULTIPLA_ESCOLHA:
