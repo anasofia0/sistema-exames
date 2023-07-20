@@ -1,19 +1,94 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>{{ exam.get_name() }}</h1>
-    <form method="POST">
-        {{ form.hidden_tag() }}
-        {% if question_type == 'verdadeiro_falso' %}
-            <p>Select whether the following statement is true or false:</p>
-            {{ form.resposta.label }} {{ form.resposta }}
-        {% elif question_type == 'multipla_escolha' %}
-            <p>Select one of the following options:</p>
-            {{ form.resposta.label }} {{ form.resposta }}
-        {% elif question_type == 'entrada_numero' %}
-            <p>Enter your answer:</p>
-            {{ form.resposta.label }} {{ form.resposta }}
-        {% endif %}
-        {{ form.submit() }}
-    </form>
+    <style>
+        .exam-container {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .exam-title {
+            text-align: center;
+            color: #333;
+        }
+
+        .question-number {
+            font-weight: bold;
+            color: #666;
+        }
+
+        .exam-form {
+            margin-top: 20px;
+        }
+
+        .response-label {
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 0.8em;
+        }
+
+        .button-container {
+            margin-top: 20px;
+        }
+
+        .btn {
+            background-color: #007bff;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .form-control[type="radio"] {
+            opacity: 0.7;
+            cursor: pointer;
+            margin: 10px 0;
+        }
+    </style>
+
+    <div class="exam-container">
+        <h1 class="exam-title">{{ exam.get_name() }}</h1>
+        <p class="question-number">Questão {{ question_index + 1}}</p>
+        <form method="POST" class="exam-form">
+            {{ form.hidden_tag() }}
+            <h2 class="question-text">{{ question.enunciado }}</h2>
+            {% if question.tipo_questao.value == 'verdadeiro_falso' %}
+                <p class="response-label">Resposta:</p>
+                {{ form.resposta(class="form-control") }}
+                {% for error in form.resposta.errors %}
+                    <span class="error-message">[{{ error }}]</span>
+                {% endfor %}
+            {% elif question.tipo_questao.value == 'multipla_escolha' %}
+                <p class="response-label">Escolha uma das opções:</p>
+                {{ form.resposta(class="form-control") }}
+                {% for error in form.resposta.errors %}
+                    <span class="error-message">[{{ error }}]</span>
+                {% endfor %}
+            {% elif question.tipo_questao.value == 'entrada_numero' %}
+                <p class="response-label">Resposta:</p>
+                {{ form.resposta(class="form-control") }}
+                {% for error in form.resposta.errors %}
+                    <span class="error-message">[{{ error }}]</span>
+                {% endfor %}
+            {% endif %}
+            <div class="button-container">
+                {{ form.submit(class="btn") }}
+                {% if question_index > 0 %}
+                    <a href="{{ url_for('exames.comeca_exame', id=exam.id, question_index=question_index-1) }}" class="btn">Anterior</a>
+                {% endif %}
+            </div>
+        </form>
+    </div>
 {% endblock %}

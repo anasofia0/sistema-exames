@@ -6,6 +6,7 @@ from wtforms import (
     SubmitField,
     FieldList,
     FormField,
+    RadioField
 )
 from wtforms.validators import DataRequired
 
@@ -27,12 +28,11 @@ class CriacaoVFForm(FlaskForm):
 
 
 class RespostaVFForm(FlaskForm):
-    resposta = SelectField(
-        choices=[(True, "Verdadeiro"), (False, "Falso")],
-        coerce=bool,
-        validators=[DataRequired()],
+    resposta = RadioField(
+        choices=[('True', 'Verdadeiro'), ('False', 'Falso')],
+        validators=[DataRequired()]
     )
-    submit = SubmitField("Salvar resposta")
+    submit = SubmitField("Próxima")
 
 
 class CriacaoNumericoForm(FlaskForm):
@@ -44,19 +44,19 @@ class CriacaoNumericoForm(FlaskForm):
 
 class RespostaNumericoForm(FlaskForm):
     resposta = DecimalField(validators=[DataRequired()])
-    submit = SubmitField("Salvar resposta")
+    submit = SubmitField("Próxima")
 
 
 class CriacaoMultiplaEscolhaForm(FlaskForm):
     enunciado = StringField("Enunciado", validators=[DataRequired()])
-    resposta = StringField("Resposta", validators=[DataRequired()])  # Resposta correta
+    resposta = StringField(validators=[DataRequired()])  # Resposta correta
     opcoes = FieldList(FormField(OpcaoForm), min_entries=1)  # Opcoes de resposta
     # nota = DecimalField(validators=[DataRequired()])
     submit = SubmitField("Criar questão")
 
 
 class RespostaMultiplaEscolhaForm(FlaskForm):
-    resposta = SelectField(
-        "Resposta", coerce=str, validators=[DataRequired()]
+    resposta = RadioField(
+        coerce=str, validators=[DataRequired()]
     )  # Resposta do estudante
-    submit = SubmitField("Salvar resposta")
+    submit = SubmitField("Próxima")

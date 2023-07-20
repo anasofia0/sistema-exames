@@ -3,17 +3,24 @@ from ..app import db
 
 
 def save_student_answer(exame_id, questao_id, aluno_id, resposta):
-    # Create a new RespostaAluno object
-    resposta_aluno = RespostaAluno(
+    
+    #Procura pra ver se o aluno ja respondeu
+    resposta_existente = RespostaAluno.query.filter_by(
         id_exame=exame_id,
         id_questao=questao_id,
-        id_aluno=aluno_id,
-        resposta=resposta,
-        nota=0.0,  # You might want to calculate this based on the correctness of the answer
-    )
+        id_aluno=aluno_id
+    ).first()
+    if(resposta_existente):
+        resposta_existente.resposta = resposta
+    else:
+        #  Cria novo RespostaAluno
+        resposta_aluno = RespostaAluno(
+            id_exame=exame_id,
+            id_questao=questao_id,
+            id_aluno=aluno_id,
+            resposta=resposta,
+            nota=0.0,  # Talvez seja bom calcular a nota aqui
+        )
+        db.session.add(resposta_aluno)
 
-    # Add the new object to the session
-    db.session.add(resposta_aluno)
-
-    # Commit the session to save the changes
     db.session.commit()
