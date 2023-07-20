@@ -168,7 +168,6 @@ def revisao(id):
     #Renderiza a pagina de revisao
     return render_template('revisao.html', exam=exam, answers=answers)
 
-<<<<<<< HEAD
 @bp.route("/exam/submit/<int:id>", methods=["GET", "POST"])
 @login_required
 def enviar_exame(id):
@@ -191,10 +190,8 @@ def enviar_exame(id):
     return redirect(url_for("dashboards.loggedAluno"))
 
 
-=======
 def datetime2int(datetime):
     return 3600*datetime.hour + 60*datetime.minute + datetime.second
->>>>>>> 280a01d9d77c2535934a95a6cf6537dd1bf0c63d
 
 def checa_datas(data_abertura, data_fechamento):
     if (data_fechamento-data_abertura).total_seconds() < 0:
