@@ -1,6 +1,6 @@
 import enum
 from . import db
-from sqlalchemy import Column, String, Integer, Enum, PickleType
+from sqlalchemy import Column, String, Integer, Enum, PickleType, Boolean
 
 
 class TipoQuestao(enum.Enum):
@@ -18,6 +18,7 @@ class Questao(db.Model):
     enunciado = Column(String, nullable=False)
     resposta_certa = Column(String, nullable=False)
     opcoes = Column(PickleType, nullable=True)  # Novo campo para salvar as opções de uma questão de múltipla escolha
+    habilitada = Column(Boolean, nullable=False)
 
     exames = db.relationship("Exame", secondary="questao_exame", back_populates="questoes") # many to many
     resposta_alunos = db.relationship("RespostaAluno", back_populates="questao") # one to many

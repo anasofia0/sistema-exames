@@ -5,19 +5,22 @@ questoes = [
         "matricula_professor": 1234,
         "tipo_questao": "VERDADEIRO_FALSO",
         "enunciado": "A água é molhada",
-        "resposta_certa": "1"
+        "resposta_certa": "1",
+        "habilitada": True
     },
     {
         "matricula_professor": 1234,
         "tipo_questao": "MULTIPLA_ESCOLHA",
         "enunciado": "Qual das opções abaixo é a letra 'a'?",
-        "resposta_certa": "a"
+        "resposta_certa": "a",
+        "habilitada": True
     },
     {
         "matricula_professor": 1234,
         "tipo_questao": "ENTRADA_NUMERO",
         "enunciado": "Quantos dedos normalmente se tem em uma mão?",
-        "resposta_certa": "5"
+        "resposta_certa": "5",
+        "habilitada": True
     },
 ]
 

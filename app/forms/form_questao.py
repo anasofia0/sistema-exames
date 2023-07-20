@@ -50,9 +50,11 @@ class RespostaNumericoForm(FlaskForm):
 class CriacaoMultiplaEscolhaForm(FlaskForm):
     enunciado = StringField("Enunciado", validators=[DataRequired()])
     resposta = StringField(validators=[DataRequired()])  # Resposta correta
-    opcoes = FieldList(FormField(OpcaoForm), min_entries=1)  # Opcoes de resposta
-    # nota = DecimalField(validators=[DataRequired()])
     submit = SubmitField("Criar questão")
+
+    # def init(self, args, **kwargs):
+    #     super(CriacaoMultiplaEscolhaForm, self).init(args, **kwargs)
+    #     self.opcoes = FieldList(StringField('Opção', validators=[DataRequired()]), min_entries=2)
 
 
 class RespostaMultiplaEscolhaForm(FlaskForm):

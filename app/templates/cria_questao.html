@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Criar questão{% endblock %}
+
+{% block content %}
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Adiciona campo de opção ao clicar no botão "Adicionar Opção"
+        document.getElementById("add-opcao").addEventListener("click", function () {
+            var opcoesGroup = document.getElementById("opcoes-group");
+
+            var div = document.createElement("div");
+            div.className = "form-group mb-3";
+
+            var input = document.createElement("input");
+            input.type = "text";
+            input.className = "form-control";
+            input.name = "opcoes"; // O mesmo nome do campo para que os valores sejam enviados corretamente
+
+            var radio = document.createElement("input");
+            radio.type = "radio";
+            radio.className = "form-check-input";
+            radio.name = "resposta";
+            radio.value = document.querySelectorAll('input[type="radio"]').length;
+
+            div.appendChild(radio);
+            div.appendChild(input);
+            opcoesGroup.appendChild(div);
+        });
+    });
+</script>
+
+<div class="container">
+    <h2 class="mb-4">Criar Questao</h2>
+
+    <form method="post" action="{{ url_for('questoes.cria_questao', tipo=tipo) }}">
+        {{ form.hidden_tag() }}
+        <div class="form-group mb-3">
+            {{ form.enunciado.label(class="form-label") }}
+            {{ form.enunciado(class="form-control", id="enunciado") }}
+            <div id="enunciadoError" class="text-danger"></div>
+        </div>
+        
+        {% if tipo == 0 or tipo == 1%}
+            <div class="form-group mb-3">
+                {{ form.resposta.label(class="form-label") }}
+                {{ form.resposta(class="form-control", id="resposta") }}
+                <div id="respostaError" class="text-danger"></div>
+            </div>
+        {% elif tipo == 2 %}
+            <!-- preencher aqui -->
+            <div id="opcoes-group">
+                <div class="form-group mb-3">
+                    <label class="form-label">Opções:</label>
+                    <div class="form-check">
+                        <input type="radio" class="form-check-input" name="resposta" value="0" />
+                        <input type="text" class="form-control" name="opcoes" />
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="btn btn-primary mb-3" id="add-opcao">Adicionar Opção</button>
+        {% endif %}
+        
+        <div class="form-group mb-3">
+            {{ form.submit(class="btn btn-primary") }}
+        </div>
+    </form>
+
+</div>
+{% endblock %}
