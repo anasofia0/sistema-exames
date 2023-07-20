@@ -67,15 +67,23 @@
             {{ form.nota(**{"class": "form-control", "id": "nota"}) }}
             <div id="notaError" class="text-danger"></div>
         </div>
+
         <div class="form-group mb-3">
             {{ form.data_abertura.label(class="form-label") }}
             {{ form.data_abertura(**{"class": "form-control", "id": "data_abertura"}) }}
             <div id="dataAberturaError" class="text-danger"></div>
         </div>
+
         <div class="form-group mb-3">
             {{ form.data_fechamento.label(class="form-label") }}
             {{ form.data_fechamento(**{"class": "form-control", "id": "data_fechamento"}) }}
             <div id="dataFechamentoError" class="text-danger"></div>
+        </div>
+        
+        <div class="form-group mb-3">
+            {{ form.duracao.label(class="form-label") }}
+            {{ form.duracao(**{"class": "form-control", "id": "duracao"}) }}
+            <div id="questoesError" class="text-danger"></div>
         </div>
 
         <div class="form-group mb-3">

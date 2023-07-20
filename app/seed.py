@@ -27,14 +27,14 @@ users = [
         "nome": "pedro",
         "email": "pedro@unb.br",
         "professor": True,
-        "senha": "asdfg"
+        "senha": "asdfgh"
     },
     {
         "matricula": "1",
         "nome": "ester",
         "email": "ester@unb.br",
         "professor": False,
-        "senha": "asdfg"
+        "senha": "asdfgh"
     }
 ]
 
@@ -44,7 +44,8 @@ exames = [
         "professor": 1234,
         "nota": 10,
         "data_abertura": datetime.now(),
-        "data_fechamento": datetime.now()
+        "data_fechamento": datetime.now(),
+        "duracao": 3600
     }
 ]
 
