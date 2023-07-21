@@ -1,5 +1,8 @@
 from decimal import Decimal
 from app.forms import form_questao
+from app.services import calcular_nota
+from ..models.user import User
+from ..models.exame import Nota
 
 from ..app import db
 from flask import (
@@ -15,7 +18,7 @@ from flask import (
 from ..models import Exame, Questao, QuestaoExame, RespostaAluno, questao
 from flask_login import current_user, login_required
 from ..forms import CriaExameForm
-from ..services.salvar_resposta_aluno import save_student_answer
+from ..services.salvar_resposta import salver_resposta_estudante
 from datetime import datetime
 
 bp = Blueprint("exames", __name__)
@@ -129,7 +132,7 @@ def comeca_exame(id, question_index):
     # Se o form enviado for valido, salva a resposta do aluno
     if form.validate_on_submit():
         print("VALIDO")
-        save_student_answer(exam.id, question.id, current_user.matricula, str(form.resposta.data))
+        salver_resposta_estudante(exam.id, question.id, current_user.matricula, str(form.resposta.data))
 
         prox_questao = question_index + 1
         if prox_questao < len(exam.questoes):
@@ -159,24 +162,21 @@ def revisao(id):
 @bp.route("/exam/submit/<int:id>", methods=["GET", "POST"])
 @login_required
 def enviar_exame(id):
-    exam = Exame.query.get(id)
+    exame = Exame.query.get(id)
 
-    # Se não existir o exame retorna 404
-    if exam is None:
+    if exame is None:
         abort(404)
+    nota = calcular_nota.calcular_nota_aluno(exame.id, current_user.matricula)
+    nota_instance = Nota.query.filter_by(matricula_aluno=current_user.matricula, exame_id=exame.id).first()
+    if nota_instance:
+        nota_instance.nota = nota
+    else:
+        nota_instance = Nota(matricula_aluno=current_user.matricula, exame_id=exame.id, nota=nota)
+        db.session.add(nota_instance)
 
-    # Não deixa o aluno fazer mais o exame
-    # exam.locked = True
-
-    # Calculate the student's grade
-    # exam.grade = calcular_nota(exam)
-
-    # Commit the changes to the database
     db.session.commit()
 
-    # Redireciona o estudante para a página inicial
     return redirect(url_for("dashboards.loggedAluno"))
-
 
 def datetime2int(datetime):
     return 3600*datetime.hour + 60*datetime.minute + datetime.second
@@ -186,3 +186,5 @@ def checa_datas(data_abertura, data_fechamento):
         raise ValueError('Data de abertura depois da data de fechamento')
     if (data_abertura-datetime.now()).total_seconds() < 60:
         raise ValueError('Data de abertura com mínimo de um minuto de diferença do momento atual')
+    
+    
