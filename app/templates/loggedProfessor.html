@@ -35,4 +35,6 @@
 {% block content %}
     <h1>Olá professor(a) {{current_user.nome}}</h1>
     <a class="button-style" href="{{ url_for('exames.cria_exame') }}">Criar exame</a>
+    <a class="button-style" href="{{ url_for('professor.listar_estudantes') }}">Ver alunos</a>
+
 {% endblock %}

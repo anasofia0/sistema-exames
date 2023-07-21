@@ -30,7 +30,7 @@ class QuestaoExame(db.Model):
 
     #questao = db.relationship("Questao", back_populates="questao")
     #exame = db.relationship("Exame", back_populates="exame")
-    
+
 class Nota(db.Model):
     __tablename__ = "nota"
 
