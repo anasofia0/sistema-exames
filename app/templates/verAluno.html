@@ -28,7 +28,7 @@
 </style>
 
 <div class="container">
-    <h2 class="mb-4">Notas</h2>
+    <h2 class="mb-4">Notas do aluno {{aluno.nome}}</h2>
     {% for dados in dados_exame %}
     <div class="card" onclick="toggleDetails(this)">
         <div class="card-header">
@@ -41,7 +41,7 @@
             <h4>Revisão:</h4>
             {% for resposta_aluno in dados.respostas_aluno %}
                 <p><strong>Questão {{ loop.index }}:</strong> {{ resposta_aluno.questao.enunciado }}</p>
-                <p>Sua resposta: {{ resposta_aluno.resposta }}</p>
+                <p>Resposta Correta: {{ resposta_aluno.resposta }}</p>
                 <p>Resposta correta: {{ resposta_aluno.questao.resposta_certa }}</p>
             {% endfor %}
         </div>
@@ -59,4 +59,5 @@
         }
     }
 </script>
+
 {% endblock %}

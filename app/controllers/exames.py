@@ -3,6 +3,7 @@ from decimal import Decimal
 
 from app.forms import form_questao
 from app.services import calcular_nota
+from ..models.user import User
 from ..models.exame import Nota
 
 from ..app import db
@@ -19,7 +20,7 @@ from flask import (
 from ..models import Exame, Questao, QuestaoExame, RespostaAluno, questao
 from flask_login import current_user, login_required
 from ..forms import CriaExameForm
-from ..services.salvar_resposta import save_student_answer
+from ..services.salvar_resposta import salver_resposta_estudante
 from datetime import datetime
 
 bp = Blueprint("exames", __name__)
@@ -143,7 +144,7 @@ def comeca_exame(id, question_index):
     # Se o form enviado for valido, salva a resposta do aluno
     if form.validate_on_submit():
         print("VALIDO")
-        save_student_answer(exam.id, question.id, current_user.matricula, str(form.resposta.data))
+        salver_resposta_estudante(exam.id, question.id, current_user.matricula, str(form.resposta.data))
 
         prox_questao = question_index + 1
         if prox_questao < len(exam.questoes):
@@ -205,9 +206,6 @@ def ver_notas():
         })
 
     return render_template("notas.html", dados_exame=dados_exame)
-
-
-
 
 def datetime2int(datetime):
     return 3600*datetime.hour + 60*datetime.minute + datetime.second

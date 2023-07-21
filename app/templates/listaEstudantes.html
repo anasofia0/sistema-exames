@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Alunos{% endblock %}
+
+{% block content %}
+<style>
+    .container {
+        width: 80%;
+        margin: auto;
+        padding: 20px;
+    }
+    .card {
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        margin-bottom: 10px;
+        padding: 20px;
+        background-color: #f9f9f9;
+        transition: background-color 0.2s ease;
+    }
+    .card:hover {
+        background-color: #f0f0f0;
+        cursor: pointer;
+    }
+    .card-header {
+        margin-bottom: 10px;
+    }
+    .card-header a {
+        text-decoration: none;
+        color: inherit;
+    }
+</style>
+
+<div class="container">
+    <h2 class="mb-4">Alunos</h2>
+    {% for aluno in alunos %}
+    <div class="card" onclick="window.location.href='{{ url_for('professor.ver_notas_aluno', matricula=aluno.matricula) }}'">
+        <div class="card-header">
+            <h3 class="mb-0">{{ aluno.nome }}</h3>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
