@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Lista de Questões{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">Lista de Questões</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Enunciado</th>
+                <th>Tipo de Questão</th>
+                <th>Resposta Correta</th>
+                <th>Opções (caso seja multipla escolha)</th>
+                <th>Habilitada</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for questao in questoes %}
+                <tr>
+                    <td>{{ questao.enunciado }}</td>
+                    <td>{{ questao.tipo_questao }}</td>
+                    <td>{{ questao.resposta_certa }}</td>
+                    <td>
+                        {% if questao.tipo_questao.value == "multipla_escolha" %}
+                            {% for opcao in questao.opcoes %}
+                                {{ opcao }}<br>
+                            {% endfor %}
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </td>
+                    <td>
+                        {{ questao.habilitada }}
+                    </td>
+                    <td>
+                        <a href="{{ url_for('questoes.edita_questao', id=questao.id) }}" class="btn btn-primary">Editar</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

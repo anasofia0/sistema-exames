@@ -13,6 +13,7 @@ questoes = [
         "tipo_questao": "MULTIPLA_ESCOLHA",
         "enunciado": "Qual das opções abaixo é a letra 'a'?",
         "resposta_certa": "a",
+        "opcoes": ["a", "b", "c", "d"],
         "habilitada": True
     },
     {

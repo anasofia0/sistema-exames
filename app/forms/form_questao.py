@@ -4,27 +4,37 @@ from wtforms import (
     SelectField,
     DecimalField,
     SubmitField,
-    FieldList,
-    FormField,
-    RadioField
+    RadioField,
+    BooleanField
 )
 from wtforms.validators import DataRequired
 
 
-class OpcaoForm(FlaskForm):
-    value = StringField("Value", validators=[DataRequired()])
-    label = StringField("Label", validators=[DataRequired()])
+# class OpcaoForm(FlaskForm):
+#     value = StringField("Value", validators=[DataRequired()])
+#     label = StringField("Label", validators=[DataRequired()])
 
 
 class CriacaoVFForm(FlaskForm):
     enunciado = StringField("Enunciado", validators=[DataRequired()])
-    resposta = SelectField(
+    resposta = RadioField(
         choices=[(True, "Verdadeiro"), (False, "Falso")],
         coerce=bool,
         validators=[DataRequired()],
     )
     # nota = DecimalField(validators=[DataRequired()])
     submit = SubmitField("Criar questão")
+
+
+class EditaVFForm(FlaskForm):
+    enunciado = StringField("Enunciado", validators=[DataRequired()])
+    resposta = RadioField(
+        choices=[(True, "Verdadeiro"), (False, "Falso")],
+        coerce=bool,
+        validators=[DataRequired()],
+    )
+    habilitada = BooleanField()
+    submit = SubmitField("Salvar questão")
 
 
 class RespostaVFForm(FlaskForm):
@@ -38,8 +48,13 @@ class RespostaVFForm(FlaskForm):
 class CriacaoNumericoForm(FlaskForm):
     enunciado = StringField("Enunciado", validators=[DataRequired()])
     resposta = DecimalField(validators=[DataRequired()])
-    # nota = DecimalField(validators=[DataRequired()])
     submit = SubmitField("Criar questão")
+
+class EditaNumericoForm(FlaskForm):
+    enunciado = StringField("Enunciado", validators=[DataRequired()])
+    resposta = DecimalField(validators=[DataRequired()])
+    habilitada = BooleanField()
+    submit = SubmitField("Salvar questão")
 
 
 class RespostaNumericoForm(FlaskForm):
@@ -52,9 +67,12 @@ class CriacaoMultiplaEscolhaForm(FlaskForm):
     resposta = StringField(validators=[DataRequired()])  # Resposta correta
     submit = SubmitField("Criar questão")
 
-    # def init(self, args, **kwargs):
-    #     super(CriacaoMultiplaEscolhaForm, self).init(args, **kwargs)
-    #     self.opcoes = FieldList(StringField('Opção', validators=[DataRequired()]), min_entries=2)
+
+class EditaMultiplaEscolhaForm(FlaskForm):
+    enunciado = StringField("Enunciado", validators=[DataRequired()])
+    resposta = StringField(validators=[DataRequired()])  # Resposta correta
+    habilitada = BooleanField()
+    submit = SubmitField("Salvar questão")
 
 
 class RespostaMultiplaEscolhaForm(FlaskForm):

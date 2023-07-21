@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}Editar questão{% endblock %}
+
+{% block content %}
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Adiciona campo de opção ao clicar no botão "Adicionar Opção"
+        document.getElementById("add-opcao").addEventListener("click", function () {
+            var opcoesGroup = document.getElementById("opcoes-group");
+
+            var div = document.createElement("div");
+            div.className = "form-group mb-3";
+
+            var input = document.createElement("input");
+            input.type = "text";
+            input.className = "form-control";
+            input.name = "opcoes"; // O mesmo nome do campo para que os valores sejam enviados corretamente
+
+            var radio = document.createElement("input");
+            radio.type = "radio";
+            radio.className = "form-check-input";
+            radio.name = "resposta";
+            radio.value = document.querySelectorAll('input[type="radio"]').length;
+
+            div.appendChild(radio);
+            div.appendChild(input);
+            opcoesGroup.appendChild(div);
+        });
+    });
+</script>
+
+<div class="container">
+    <h2 class="mb-4">Editar Questao</h2>
+
+    <form method="post" action="{{ url_for('questoes.edita_questao', id=id) }}">
+        {{ form.hidden_tag() }}
+        <div class="form-group mb-3">
+            {{ form.enunciado.label(class="form-label") }}
+            {{ form.enunciado(class="form-control", id="enunciado") }}
+            <div id="enunciadoError" class="text-danger"></div>
+        </div>
+        
+        {% if tipo.value == "verdadeiro_falso" %}
+            <div class="form-group mb-3">
+                {{ form.resposta.label(class="form-label") }}
+                {{ form.resposta(class="form-control", id="resposta") }}
+                <div id="respostaError" class="text-danger"></div>
+            </div>
+        {% elif tipo.value == "entrada_numero" %}
+            <div class="form-group mb-3">
+                {{ form.resposta.label(class="form-label") }}
+                {{ form.resposta(class="form-control", id="resposta") }}
+                <div id="respostaError" class="text-danger"></div>
+            </div>
+        {% elif tipo.value == "multipla_escolha" %}
+            <!-- preencher aqui -->
+            <div id="opcoes-group">
+                <div class="form-group mb-3">
+                    <label class="form-label">Opções:</label>
+                    {% for opcao in opcoes %}
+                    <div class="form-check">
+                        <input type="radio" class="form-check-input" name="resposta" value="{{opcao[0]}}" />
+                        <input type="text" class="form-control" name="opcoes" value={{opcao[1]}} />
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <button type="button" class="btn btn-primary mb-3" id="add-opcao">Adicionar Opção</button>
+        {% endif %}
+        
+        
+        <div class="form-group mb-3">
+            {{ form.habilitada.label(class="form-label") }}
+            {{ form.habilitada(class="form-control", id="habilitada") }}
+        </div>
+        <div class="form-group mb-3">
+            {{ form.submit(class="btn btn-primary") }}
+        </div>
+    </form>
+
+</div>
+{% endblock %}
