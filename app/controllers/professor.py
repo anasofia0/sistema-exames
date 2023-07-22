@@ -52,6 +52,7 @@ def ver_provas():
 
 @bp.route("/exam_grades/<int:id>", methods=["GET"])
 @login_required
+@professor_required
 def ver_notas_provas(id):
     notas = Nota.query.filter_by(exame_id=id).all()
     return render_template("notasProvaProfessor.html", notas=notas)
