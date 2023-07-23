@@ -190,6 +190,22 @@ def enviar_exame(id):
 
     return redirect(url_for("dashboards.loggedAluno"))
 
+@bp.route("/grades", methods=["GET"])
+@login_required
+def ver_notas():
+    notas = Nota.query.filter_by(matricula_aluno=current_user.matricula).all()
+    dados_exame = []
+
+    for nota in notas:
+        respostas_aluno = RespostaAluno.query.filter_by(id_exame=nota.exame_id, id_aluno=current_user.matricula).all()
+        dados_exame.append({
+            "exame": nota.exame,
+            "nota": nota,
+            "respostas_aluno": respostas_aluno
+        })
+
+    return render_template("notas.html", dados_exame=dados_exame)
+
 def datetime2int(datetime):
     return 3600*datetime.hour + 60*datetime.minute + datetime.second
 
