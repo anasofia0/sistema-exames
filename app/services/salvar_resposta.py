@@ -2,7 +2,7 @@ from ..models.resposta_aluno import RespostaAluno
 from ..app import db
 
 
-def salver_resposta_estudante(exame_id, questao_id, aluno_id, resposta):
+def salvar_resposta_estudante(exame_id, questao_id, aluno_id, resposta):
     
     #Procura pra ver se o aluno ja respondeu
     resposta_existente = RespostaAluno.query.filter_by(

@@ -1,6 +1,5 @@
 from . import db
-from sqlalchemy import Column, String, Integer, Float, DATETIME, ForeignKey, Interval
-
+from sqlalchemy import Column, String, Integer, Float, DATETIME, ForeignKey, Boolean
 
 class Exame(db.Model):
     __tablename__ = "exame"
@@ -42,3 +41,15 @@ class Nota(db.Model):
     aluno = db.relationship('User', backref=db.backref('notas', lazy=True))
     exame = db.relationship('Exame', backref=db.backref('notas', lazy=True))
 
+class TempoExameAluno(db.Model):
+
+    __tablename__ = "tempo_exame_aluno"
+
+    id = Column(Integer, primary_key=True)
+    matricula_aluno = Column(Integer, ForeignKey('user.matricula'), nullable=False)
+    exame_id = Column(Integer, ForeignKey('exame.id'), nullable=False)
+    tempo_inicio = Column(DATETIME, nullable=False)
+    terminou = Column(Boolean, nullable=False)
+
+    aluno = db.relationship('User', backref=db.backref('tempo_exame_aluno', lazy=True))
+    exame = db.relationship('Exame', backref=db.backref('tempo_exame_aluno', lazy=True))

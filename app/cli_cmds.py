@@ -27,3 +27,9 @@ def seed_exames():
     for eq in exames_questoes:
         db.session.add(QuestaoExame(**eq))
     db.session.commit()
+
+@seed_cli.command("all")
+def seed_all():
+    seed_questoes()
+    seed_users()
+    seed_exames()

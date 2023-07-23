@@ -42,7 +42,34 @@
 
     <div class="exam-detail-container">
         <h1 class="exam-detail-title">{{ exam.get_name() }}</h1>
-        <p class="exam-detail-text">Pontuação: {{ exam.nota }}</p> <!-- Replace with the correct attribute for grade -->
-        <a href="{{ url_for('exames.comeca_exame', id=exam.get_id(), question_index=0) }}" class="exam-start-button">Iniciar Exame</a>
+        <p class="exam-detail-text">Pontuação: {{ exam.nota }}</p>
+        <p class="exam-detail-text">Início: {{ exam.data_abertura.strftime("%Y/%m/%d %H:%M:%S") }}</p>
+        <p class="exam-detail-text">Fim: {{ exam.data_fechamento.strftime("%Y/%m/%d %H:%M:%S") }}</p>
+        
+        <a href="{{ url_for('exames.comeca_exame', id=exam.get_id(), question_index=0) }}" class="exam-start-button" onclick="submitCurrentTime()">
+            Iniciar Exame
+        </a>
     </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+    function submitCurrentTime() {
+        // Get the current date and time
+        var now = new Date();
+
+        // Format the date and time as a string
+        var tempo_atual = now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate() + " " + now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds();
+        //var tempo_atual = Date.now();
+        console.log(tempo_atual)
+
+        // Send the current time to the server using AJAX
+        $.post("/exam/{{exam.id}}/submit_time", { tempo_atual: tempo_atual }, function(data) {
+            if (data.success) {
+                console.log("Time submitted successfully");
+            } else {
+                console.log("Failed to submit time");
+            }
+        });
+    }
+    </script>
 {% endblock %}

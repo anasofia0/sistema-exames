@@ -59,6 +59,7 @@
     </style>
 
     <div class="exam-container">
+        <p>Tempo restante: <span id="timer"></span></p>
         <h1 class="exam-title">{{ exam.get_name() }}</h1>
         <p class="question-number">Questão {{ question_index + 1}}</p>
         <form method="POST" class="exam-form">
@@ -91,4 +92,32 @@
             </div>
         </form>
     </div>
+
+    <script>
+        function startTimer(duration, display) {
+            var timer = duration, minutes, seconds;
+            setInterval(function () {
+                minutes = parseInt(timer / 60, 10);
+                seconds = parseInt(timer % 60, 10);
+
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                display.textContent = minutes + ":" + seconds;
+
+                if (--timer < 0) {
+                    // Aqui você pode redirecionar o usuário ou realizar alguma ação ao término do tempo
+                    // Exemplo de redirecionamento:
+                    window.location.href = "/exam/review/" + {{ exam.id }};
+                }
+            }, 1000);
+        }
+
+        window.onload = function () {
+            // Defina a duração do exame em segundos
+            var duration = {{ tempo_restante }} ;
+            var display = document.querySelector('#timer');
+            startTimer(duration, display);
+        };
+    </script>
 {% endblock %}

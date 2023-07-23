@@ -2,7 +2,7 @@ from decimal import Decimal
 from app.forms import form_questao
 from app.services import calcular_nota
 from ..models.user import User
-from ..models.exame import Nota
+from ..models.exame import Nota, TempoExameAluno
 
 from ..app import db
 from flask import (
@@ -14,12 +14,15 @@ from flask import (
     abort,
     redirect,
     url_for,
+    jsonify,
+    flash
 )
 from ..models import Exame, Questao, QuestaoExame, RespostaAluno, questao
 from flask_login import current_user, login_required
 from ..forms import CriaExameForm
-from ..services.salvar_resposta import salver_resposta_estudante
+from ..services.salvar_resposta import salvar_resposta_estudante
 from datetime import datetime
+import time
 
 bp = Blueprint("exames", __name__)
 
@@ -42,26 +45,28 @@ def cria_exame():
         data_abertura = form.data_abertura.data
         data_fechamento = form.data_fechamento.data
 
-        checa_datas(data_abertura, data_fechamento)
+        ok = checa_datas(data_abertura, data_fechamento)
 
-        novo_exame = Exame(
-            nome=request.form.get("nome"),
-            professor=matricula,
-            nota=request.form.get("nota"),
-            data_abertura=data_abertura,
-            data_fechamento=data_fechamento,
-            duracao = datetime2int(form.duracao.data)
-        )
-        db.session.add(novo_exame)
-        db.session.flush()
-        for questao in questoes:
-            questao_exame = QuestaoExame(
-                exame_id=novo_exame.id, questao_id=questao.id, nota=questao.id * 10
+        if ok:
+
+            novo_exame = Exame(
+                nome=request.form.get("nome"),
+                professor=matricula,
+                nota=request.form.get("nota"),
+                data_abertura=data_abertura,
+                data_fechamento=data_fechamento,
+                duracao = datetime2int(form.duracao.data)
             )
-            db.session.add(questao_exame)
-        db.session.commit()
+            db.session.add(novo_exame)
+            db.session.flush()
+            for questao in questoes:
+                questao_exame = QuestaoExame(
+                    exame_id=novo_exame.id, questao_id=questao.id, nota=questao.id * 10
+                )
+                db.session.add(questao_exame)
+            db.session.commit()
 
-        return redirect("/logged/professor")
+            return redirect("/logged/professor")
     print(form.errors)
     return render_template("criacao_exame.html", form=form)
 
@@ -84,14 +89,24 @@ def detalhes_exame(id):
     return render_template('detalhesExame.html', exam=exam)
 
 
-
-
 @bp.route("/exam/<int:id>/<int:question_index>", methods=["GET", "POST"])
 @login_required
 def comeca_exame(id, question_index):
     # Procura o exame na base de dados
+    time.sleep(0.2)
     exam = Exame.query.get(id)
-
+    tempo_aluno = TempoExameAluno.query.filter_by(exame_id=exam.id, matricula_aluno=current_user.matricula).first()
+    tempo_total = exam.duracao
+    tempo_restante = tempo_total - (datetime.now() - tempo_aluno.tempo_inicio).total_seconds()
+    if tempo_aluno.terminou:
+        flash("Já finalizou a prova")
+        return redirect("/logged/aluno")
+    if (exam.data_fechamento - datetime.now()).total_seconds() < 0:
+        flash("Passou do prazo")
+        return redirect(url_for('exames.revisao', id=id))
+    elif tempo_restante < 0:
+        flash("Tempo esgotado")
+        return redirect(url_for('exames.revisao', id=id))
     # Se não existe exame ou o index da questao é menor que 0 ou maior que o numero de questoes retorna 404
     if exam is None or question_index < 0 or question_index >= len(exam.questoes):
         abort(404)
@@ -132,7 +147,7 @@ def comeca_exame(id, question_index):
     # Se o form enviado for valido, salva a resposta do aluno
     if form.validate_on_submit():
         print("VALIDO")
-        salver_resposta_estudante(exam.id, question.id, current_user.matricula, str(form.resposta.data))
+        salvar_resposta_estudante(exam.id, question.id, current_user.matricula, str(form.resposta.data))
 
         prox_questao = question_index + 1
         if prox_questao < len(exam.questoes):
@@ -143,7 +158,26 @@ def comeca_exame(id, question_index):
             # Redirecionar para a pagina de revisao
             return redirect(url_for('exames.revisao', id=id))
     # Renderiza a pagina do exame, passando o exame, a questão e o form para o template
-    return render_template("relizarExame.html", exam=exam, question=question, form=form, question_index=question_index)
+    return render_template("relizarExame.html", exam=exam, question=question, form=form, question_index=question_index, tempo_restante=tempo_restante)
+
+@bp.route("/exam/<int:id_exame>/submit_time", methods=["POST"])
+@login_required
+def salva_tempo(id_exame):
+
+    if not TempoExameAluno.query.filter_by(exame_id=id_exame, matricula_aluno=current_user.matricula).first():
+        tempo_atual = request.form.get('tempo_atual')
+        tempo_atual = datetime.strptime(tempo_atual, "%Y-%m-%d %H:%M:%S")
+        # print(tempo_atual)
+        matricula = int(current_user.matricula)
+
+        tempo = TempoExameAluno(matricula_aluno=matricula,
+                                exame_id=id_exame,
+                                tempo_inicio=tempo_atual,
+                                terminou = False)
+        db.session.add(tempo)
+        db.session.commit()
+
+    return jsonify(success=True)
 
 
 @bp.route('/exam/review/<int:id>', methods=['GET'])
@@ -174,6 +208,9 @@ def enviar_exame(id):
         nota_instance = Nota(matricula_aluno=current_user.matricula, exame_id=exame.id, nota=nota)
         db.session.add(nota_instance)
 
+    tempo_exame = TempoExameAluno.query.filter_by(exame_id=id, matricula_aluno=current_user.matricula).first()
+    tempo_exame.terminou = True
+
     db.session.commit()
 
     return redirect(url_for("dashboards.loggedAluno"))
@@ -198,9 +235,12 @@ def datetime2int(datetime):
     return 3600*datetime.hour + 60*datetime.minute + datetime.second
 
 def checa_datas(data_abertura, data_fechamento):
+    ok = True
     if (data_fechamento-data_abertura).total_seconds() < 0:
-        raise ValueError('Data de abertura depois da data de fechamento')
+        flash('Data de abertura depois da data de fechamento')
+        ok = False
     if (data_abertura-datetime.now()).total_seconds() < 60:
-        raise ValueError('Data de abertura com mínimo de um minuto de diferença do momento atual')
+        flash('Data de abertura com mínimo de um minuto de diferença do momento atual')
+        ok = False
     
-    
+    return ok
