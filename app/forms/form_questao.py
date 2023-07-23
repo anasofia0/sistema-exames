@@ -29,9 +29,8 @@ class CriacaoVFForm(FlaskForm):
 class EditaVFForm(FlaskForm):
     enunciado = StringField("Enunciado", validators=[DataRequired()])
     resposta = RadioField(
-        choices=[(True, "Verdadeiro"), (False, "Falso")],
-        coerce=bool,
-        validators=[DataRequired()],
+        choices=[('True', 'Verdadeiro'), ('False', 'Falso')],
+        validators=[DataRequired()]
     )
     habilitada = BooleanField()
     submit = SubmitField("Salvar questão")
