@@ -1,10 +1,40 @@
-{% extends "base.html" %}
-{% block title %}Criar questões{% endblock %}
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .button-container {
+            text-align: center;
+        }
+        .button-style {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+        .button-style:hover {
+            background-color: #0056b3;
+        }
+        h1 {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    {% extends "base.html" %}
+    {% block title %}Criar questões{% endblock %}
 
-{% block content %}
+    {% block content %}
 
-    <a href="/questoes/create/0" class="button-style">Verdadeiro ou falso</a>
-    <a href="/questoes/create/1" class="button-style">Numérico</a>
-    <a href="/questoes/create/2" class="button-style">Múltipla escolha</a>
-
-{% endblock %}
+        <h1>Selecione o tipo de questão</h1>
+        <div class="button-container">
+            <a href="/questoes/create/0" class="button-style">Verdadeiro ou falso</a>
+            <a href="/questoes/create/1" class="button-style">Numérico</a>
+            <a href="/questoes/create/2" class="button-style">Múltipla escolha</a>
+        </div>
+    {% endblock %}
+</body>
+</html>

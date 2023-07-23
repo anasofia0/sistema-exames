@@ -1,44 +1,97 @@
-{% extends "base.html" %}
-{% block title %}Lista de Questões{% endblock %}
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            background-color: #f5f5f5;
+        }
 
-{% block content %}
-<div class="container">
-    <h2 class="mb-4">Lista de Questões</h2>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Enunciado</th>
-                <th>Tipo de Questão</th>
-                <th>Resposta Correta</th>
-                <th>Opções (caso seja multipla escolha)</th>
-                <th>Habilitada</th>
-                <th>Ações</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for questao in questoes %}
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th, .table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        .table tr:nth-child(even){background-color: #f2f2f2;}
+
+        .table tr:hover {background-color: #ddd;}
+
+        .table th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #808080;
+            color: white;
+        }
+
+        .btn {
+            background-color: #007bff;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        
+    </style>
+</head>
+<body>
+    {% extends "base.html" %}
+    {% block title %}Lista de Questões{% endblock %}
+
+    {% block content %}
+    <div class="container">
+        <h2 class="mb-4">Lista de Questões</h2>
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>{{ questao.enunciado }}</td>
-                    <td>{{ questao.tipo_questao }}</td>
-                    <td>{{ questao.resposta_certa }}</td>
-                    <td>
-                        {% if questao.tipo_questao.value == "multipla_escolha" %}
-                            {% for opcao in questao.opcoes %}
-                                {{ opcao }}<br>
-                            {% endfor %}
-                        {% else %}
-                            N/A
-                        {% endif %}
-                    </td>
-                    <td>
-                        {{ questao.habilitada }}
-                    </td>
-                    <td>
-                        <a href="{{ url_for('questoes.edita_questao', id=questao.id) }}" class="btn btn-primary">Editar</a>
-                    </td>
+                    <th>Enunciado</th>
+                    <th>Tipo de Questão</th>
+                    <th>Resposta Correta</th>
+                    <th>Opções (caso seja multipla escolha)</th>
+                    <th>Habilitada</th>
+                    <th>Ações</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
-{% endblock %}
+            </thead>
+            <tbody>
+                {% for questao in questoes %}
+                    <tr>
+                        <td>{{ questao.enunciado }}</td>
+                        <td>{{ questao.tipo_questao }}</td>
+                        <td>{{ questao.resposta_certa }}</td>
+                        <td>
+                            {% if questao.tipo_questao.value == "multipla_escolha" %}
+                                {% for opcao in questao.opcoes %}
+                                    {{ opcao }}<br>
+                                {% endfor %}
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </td>
+                        <td>
+                            {{ questao.habilitada }}
+                        </td>
+                        <td>
+                            <a href="{{ url_for('questoes.edita_questao', id=questao.id) }}" class="btn btn-primary">Editar</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endblock %}
+</body>
+</html>
