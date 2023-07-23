@@ -1,18 +1,68 @@
+<style>
+    .container {
+        width: 80%;
+        margin: auto;
+        padding: 20px;
+    }
+    .card {
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        margin-bottom: 10px;
+        padding: 20px;
+        background-color: #f9f9f9;
+        transition: background-color 0.2s ease;
+    }
+    .card:hover {
+        background-color: #f0f0f0;
+    }
+    .card-header {
+        margin-bottom: 10px;
+        font-size: 20px;
+        font-weight: bold;
+        color: #007BFF;
+    }
+    .card-body {
+        font-size: 16px;
+        color: #333;
+    }
+    .collapse {
+        display: none;
+    }
+</style>
+
 {% extends "base.html" %}
 {% block title %}Notas do Exame{% endblock %}
 
 {% block content %}
 <div class="container">
     <h2 class="mb-4">Notas do Exame</h2>
-    {% for nota in notas %}
-    <div class="card">
+    {% for data in notas_data %}
+    <div class="card" onclick="toggleDetails(this)">
         <div class="card-header">
-            <h3 class="mb-0">{{ nota.aluno.nome }}</h3>
+            <h3 class="mb-0">{{ data.nota.aluno.nome }}</h3>
         </div>
         <div class="card-body">
-            <p class="mb-0">Nota: {{ nota.nota }}</p>
+            <p class="mb-0">Nota: {{ data.nota.nota }}</p>
+        </div>
+        <div class="collapse">
+            {% for resposta_aluno in data.respostas_aluno %}
+                <p><strong>Questão {{ loop.index }}:</strong> {{ resposta_aluno.questao.enunciado }}</p>
+                <p>Resposta do aluno: {{ resposta_aluno.resposta }}</p>
+                <p>Resposta correta: {{ resposta_aluno.questao.resposta_certa }}</p>
+            {% endfor %}
         </div>
     </div>
     {% endfor %}
 </div>
+
+<script>
+    function toggleDetails(element) {
+        var details = element.querySelector(".collapse");
+        if (details.style.display !== "block") {
+            details.style.display = "block";
+        } else {
+            details.style.display = "none";
+        }
+    }
+</script>
 {% endblock %}

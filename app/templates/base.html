@@ -85,8 +85,8 @@
     <body>
         <nav class="navbar">
             <div>
-                <a class="navbar-brand" href="/">Moodlenator 2000</a>
-                <a class="nav-link active" href="{% if current_user.role == 'student' %}{{ url_for('dashboards.loggedStudent') }}{% else %}{{ url_for('dashboards.loggedProfessor') }}{% endif %}">Home</a>
+                <a class="nav-link active" href="{% if current_user.professor == False %}{{ url_for('dashboards.loggedAluno') }}{% else %}{{ url_for('dashboards.loggedProfessor') }}{% endif %}">Moodlenator 2000</a>
+                <a class="nav-link active" href="{% if current_user.professor == False %}{{ url_for('dashboards.loggedAluno') }}{% else %}{{ url_for('dashboards.loggedProfessor') }}{% endif %}">Home</a>
                 {% if current_user.is_authenticated %}
                     <a class="nav-link" href="/">Minhas turmas</a>
                 {% endif %}

@@ -55,6 +55,14 @@ def ver_provas():
 @professor_required
 def ver_notas_provas(id):
     notas = Nota.query.filter_by(exame_id=id).all()
-    return render_template("notasProvaProfessor.html", notas=notas)
+    notas_data = []
+    for nota in notas:
+        respostas_aluno = RespostaAluno.query.filter_by(id_exame=nota.exame_id, id_aluno=nota.matricula_aluno).all()
+        notas_data.append({
+            "nota": nota,
+            "respostas_aluno": respostas_aluno
+        })
+    return render_template("notasProvaProfessor.html", notas_data=notas_data)
+
 
 

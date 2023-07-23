@@ -1,6 +1,7 @@
 from decimal import Decimal
 from app.forms import form_questao
 from app.services import calcular_nota
+from app.services.professor_anotation import professor_required
 from ..models.user import User
 from ..models.exame import Nota, TempoExameAluno
 
@@ -34,6 +35,7 @@ def index():
 
 @bp.route("/exam/create", methods=["GET", "POST"])
 @login_required
+@professor_required
 def cria_exame():
     form = CriaExameForm()
     matricula = current_user.get_id()
@@ -134,13 +136,10 @@ def comeca_exame(id, question_index):
         previous_answer = RespostaAluno.query.filter_by(id_exame=exam.id, id_questao=question.id, id_aluno=current_user.matricula).first()
         if previous_answer:
             if question.tipo_questao == questao.TipoQuestao.VERDADEIRO_FALSO:
-                # Convert the previous answer to a boolean
                 form.resposta.data = previous_answer.resposta
             elif question.tipo_questao == questao.TipoQuestao.MULTIPLA_ESCOLHA:
-                # Convert the previous answer to an integer
                 form.resposta.data = str(previous_answer.resposta)
             elif question.tipo_questao == questao.TipoQuestao.ENTRADA_NUMERO:
-                # Convert the previous answer to a decimal
                 form.resposta.data = Decimal(previous_answer.resposta)
 
     
