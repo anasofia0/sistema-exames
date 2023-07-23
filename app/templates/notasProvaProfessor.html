@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Notas do Exame{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">Notas do Exame</h2>
+    {% for nota in notas %}
+    <div class="card">
+        <div class="card-header">
+            <h3 class="mb-0">{{ nota.aluno.nome }}</h3>
+        </div>
+        <div class="card-body">
+            <p class="mb-0">Nota: {{ nota.nota }}</p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
