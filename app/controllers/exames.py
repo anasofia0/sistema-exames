@@ -61,9 +61,9 @@ def cria_exame():
             )
             db.session.add(novo_exame)
             db.session.flush()
-            for questao in questoes:
+            for questao in form.questoes.data:
                 questao_exame = QuestaoExame(
-                    exame_id=novo_exame.id, questao_id=questao.id, nota=questao.id * 10
+                    exame_id=novo_exame.id, questao_id=questao, nota=10/len(form.questoes.data)
                 )
                 db.session.add(questao_exame)
             db.session.commit()
