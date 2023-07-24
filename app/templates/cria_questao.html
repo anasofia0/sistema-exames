@@ -62,6 +62,7 @@
 
     {% block content %}
 
+        
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             // Adiciona campo de opção ao clicar no botão "Adicionar Opção"
@@ -85,6 +86,16 @@
                 div.appendChild(radio);
                 div.appendChild(input);
                 opcoesGroup.appendChild(div);
+            });
+
+            // Remove a última opção ao clicar no botão "Remover Última Opção"
+            document.getElementById("remove-opcao").addEventListener("click", function () {
+                var opcoesGroup = document.getElementById("opcoes-group");
+                var opcoesDivs = opcoesGroup.getElementsByClassName("form-group");
+
+                if (opcoesDivs.length > 1) { // Certifica-se que sempre haverá ao menos uma opção
+                    opcoesGroup.removeChild(opcoesDivs[opcoesDivs.length - 1]);
+                }
             });
         });
     </script>
@@ -118,6 +129,7 @@
                     </div>
                 </div>
                 <button type="button" class="btn btn-primary mb-3" id="add-opcao">Adicionar Opção</button>
+                <button type="button" class="btn btn-danger mb-3" id="remove-opcao">Remover Última Opção</button>
             {% endif %}
             
             <div class="form-group mb-3">
