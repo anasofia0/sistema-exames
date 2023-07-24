@@ -1,13 +1,7 @@
 # sistema-exames
 
-Este é o README do projeto "Sistema de Exames" desenvolvido utilizando Python Flask. Esta aplicação permite que professorem apliquem exames para seus alunos.
+Este é o README do projeto "Sistema de Exames" desenvolvido utilizando Python Flask. Esta aplicação permite que professores apliquem exames para seus alunos.
 
-## Descrição da Aplicação
-
-### Perfis de Usuário
-### Fluxos e Funcionalidades Disponíveis
-### Principais Decisões de Projeto
-## Screenshots
 ## Instruções para Executar o Projeto
 
 Siga as instruções abaixo para executar a aplicação em um sistema limpo:
@@ -33,7 +27,7 @@ Siga as instruções abaixo para executar a aplicação em um sistema limpo:
 6. Execute o seguinte comando para iniciar a aplicação:
 
    ```
-   export FLASK_APP=app.app
+   export FLASK_APP=aplication.app
    flask run
    ```
 
@@ -47,7 +41,19 @@ Siga as instruções abaixo para executar a aplicação em um sistema limpo:
    flask seed exames
    ```
 
-Certifique-se de que as portas necessárias estejam liberadas e que não haja conflitos com outros serviços em execução.
+9. Para criar um usuário professor, deve-se marcar a checkobx e inserir o código
 
-Nota: Lembre-se de configurar corretamente as informações de conexão com o banco de dados no arquivo de configuração do projeto, caso seja necessário.
+   ```
+   debugmode
+   ```
+
+10. Caso queira utilizar algum usuário de teste, existem dois perfis previamente criados:
+   - Ester (aluno): 
+      - Matrícula: 1
+      - Senha: asdfgh
+   - Pedro (professor):
+      - Matrícula: 1234
+      - Senha: asdfgh
+
+Certifique-se de que as portas necessárias estejam liberadas e que não haja conflitos com outros serviços em execução.
 
