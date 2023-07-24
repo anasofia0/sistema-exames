@@ -47,13 +47,13 @@ Siga as instruções abaixo para executar a aplicação em um sistema limpo:
    - adiciona 2 exames
    - faz o usuário de matrícula 2 realizar o exame 1
 
-10. Para criar um usuário professor, deve-se marcar a checkbox e inserir o código
+9. Para criar um usuário professor, deve-se marcar a checkbox e inserir o código
 
    ```
    debugmode
    ```
 
-11. Caso queira utilizar algum usuário de teste, existem dois perfis previamente criados:
+10. Caso queira utilizar algum usuário de teste, existem dois perfis previamente criados:
    - Ester (aluno): 
       - Matrícula: 1
       - Senha: asdfgh
