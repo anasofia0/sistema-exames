@@ -1,8 +1,8 @@
 from flask.cli import AppGroup
 
 from .app import db
-from .models import Questao, User, Exame, QuestaoExame
-from .seed import questoes, users, exames, exames_questoes
+from .models import Questao, User, Exame, QuestaoExame, TempoExameAluno, RespostaAluno, Nota
+from .seed import questoes, users, exames, exames_questoes, tempo_exame_aluno, resposta_aluno, nota
 
 seed_cli = AppGroup("seed")
 
@@ -26,6 +26,12 @@ def seed_exames():
         db.session.add(Exame(**exame))
     for eq in exames_questoes:
         db.session.add(QuestaoExame(**eq))
+    for resp in resposta_aluno:
+        db.session.add(RespostaAluno(**resp))
+    for temp in tempo_exame_aluno:
+        db.session.add(TempoExameAluno(**temp))
+    for n in nota:
+        db.session.add(Nota(**n))
     db.session.commit()
 
 @seed_cli.command("all")

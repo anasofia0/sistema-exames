@@ -5,7 +5,7 @@ questoes = [
         "matricula_professor": 1234,
         "tipo_questao": "VERDADEIRO_FALSO",
         "enunciado": "A água é molhada",
-        "resposta_certa": "1",
+        "resposta_certa": "True",
         "habilitada": True
     },
     {
@@ -28,15 +28,22 @@ questoes = [
 users = [
     {
         "matricula": "1234",
-        "nome": "pedro",
+        "nome": "Pedro",
         "email": "pedro@unb.br",
         "professor": True,
         "senha": "asdfgh"
     },
     {
         "matricula": "1",
-        "nome": "ester",
+        "nome": "Ester",
         "email": "ester@unb.br",
+        "professor": False,
+        "senha": "asdfgh"
+    },
+    {
+        "matricula": "2",
+        "nome": "Jorginho",
+        "email": "jorginho@unb.br",
         "professor": False,
         "senha": "asdfgh"
     }
@@ -79,6 +86,11 @@ exames_questoes = [
         "questao_id": 2,
         "nota": 5
     },
+    {
+        "exame_id": 1,
+        "questao_id": 3,
+        "nota": 5
+    },
         {
         "exame_id": 2,
         "questao_id": 1,
@@ -88,5 +100,46 @@ exames_questoes = [
         "exame_id": 2,
         "questao_id": 2,
         "nota": 5
+    }
+]
+
+tempo_exame_aluno = [
+    {
+        "matricula_aluno": 2,
+        "exame_id": 1,
+        "tempo_inicio": datetime.now(),
+        "terminou": True
+    }
+]
+
+resposta_aluno = [
+    {
+        "id_exame": 1,
+        "id_questao": 1,
+        "id_aluno": 2,
+        "resposta": "True",
+        "nota": 0
+    },
+    {
+        "id_exame": 1,
+        "id_questao": 2,
+        "id_aluno": 2,
+        "resposta": "b",
+        "nota": 0
+    },
+    {
+        "id_exame": 1,
+        "id_questao": 3,
+        "id_aluno": 2,
+        "resposta": "10",
+        "nota": 0
+    }
+]
+
+nota = [
+    {
+        "matricula_aluno": 2,
+        "exame_id": 1,
+        "nota": 10/3
     }
 ]
