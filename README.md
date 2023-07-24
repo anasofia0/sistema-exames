@@ -41,7 +41,7 @@ Siga as instruções abaixo para executar a aplicação em um sistema limpo:
    flask seed exames
    ```
 
-9. Para criar um usuário professor, deve-se marcar a checkobx e inserir o código
+9. Para criar um usuário professor, deve-se marcar a checkbox e inserir o código
 
    ```
    debugmode
